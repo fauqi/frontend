@@ -17,10 +17,7 @@ operator=""
 lontong=Tk()
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
-ads
-sd
-s
-d
+
 
 def splitter(s):
     

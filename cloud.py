@@ -6,125 +6,135 @@ from tkinter import*
 from PIL import ImageTk, Image
 import io
 
-dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
-dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
-#print(dataku.json())
-dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
-print(dataku_objek)
-result =dataku.json()
+# dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
+# dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
+# #print(dataku.json())
+# dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
+# print(dataku_objek)
+# result =dataku.json()
 
-# result=[
-#     {   
-#         "brand": "balibul aqiqah",
-#         "customer": "anieta",
-#         "deadline": "Senin, 08 maret  2021",
-#         "image": "https://indowella.com/new/public/",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "2000 pcs",
-#         "stock": "[balibul aqiqah] sablon  #10 oz hok",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "joja house",
-#         "customer": "johanes",
-#         "deadline": "Jum'at, 05 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20210303043450-joja house baru 2 warna.JPG",
-#         "info": "2 sisi atau lebih screen :B4",
-#         "is_stock": False,
-#         "qty": "500 pcs",
-#         "stock": "[joja house] sablon 14 HOKKAKU OV",
-#         "warna": "hitam kuning"
-#     },
-#     {
-#         "brand": "padma",
-#         "customer": "andrea",
-#         "deadline": "Minggu, 07 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20210303073346-padma 14oz oval wita.JPG",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "1000 pcs",
-#         "stock": "[padma] sablon 14 Wita OV",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "Dzaice",
-#         "customer": "candra",
-#         "deadline": "Minggu, 07 maret  2021",
-#         "image": "https://indowella.com/new/public/",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "500 pcs",
-#         "stock": "[Dzaice] sablon 22 Mcup D L",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "inikah rasanya",
-#         "customer": "Fajar ibnu",
-#         "deadline": "Minggu, 07 maret  2021",
-#         "image": "https://indowella.com/new/public/",
-#         "info": "2 sisi atau lebih screen :B2",
-#         "is_stock": False,
-#         "qty": "1000 pcs",
-#         "stock": "[inikah rasanya] sablon 16 HOKKAKU OV",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "tebus haus",
-#         "customer": "surya",
-#         "deadline": "Minggu, 07 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20201019085135-tebus haus 16starindo 5gr.PNG",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "500 pcs",
-#         "stock": "[tebus haus] sablon 16 SI D 5g",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "tebus haus",
-#         "customer": "surya",
-#         "deadline": "Minggu, 07 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20201019085135-tebus haus 16starindo 5gr.PNG",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "500 pcs",
-#         "stock": "[tebus haus] sablon 16 SI D 5g",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "nyeker",
-#         "customer": "adtya",
-#         "deadline": "Rabu, 10 maret  2021",
-#         "image": "https://indowella.com/new/public/",
-#         "info": "1 sisi screen :",
-#         "is_stock": False,
-#         "qty": "500 pcs",
-#         "stock": "[nyeker] sablon box burger",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "protiga",
-#         "customer": "taufiq",
-#         "deadline": "Sabtu, 06 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20210302083954-protiga.PNG",
-#         "info": "2 sisi atau lebih screen :",
-#         "is_stock": False,
-#         "qty": "1000 pcs",
-#         "stock": "[protiga] sablon 16 HOKKAKU OV",
-#         "warna": "hitam -"
-#     },
-#     {
-#         "brand": "protiga",
-#         "customer": "taufiq",
-#         "deadline": "Sabtu, 06 maret  2021",
-#         "image": "https://indowella.com/new/public/desain/20210302084040-protiga sealcup.PNG",
-#         "info": "1 sisi screen :",
-#         "is_stock": False,
-#         "qty": "1 roll",
-#         "stock": "[protiga] sablon seal cup (1000)",
-#         "warna": "hitam -"
-#     }
-# ]
+result = [
+    {
+        "brand": "jeli julid",
+        "customer": "fahmi",
+        "deadline": "Sabtu, 06 maret  2021",
+        "id": 6131,
+        "image": "https://indowella.com/new/public/desain/20210106143031-jelijul.PNG",
+        "info": "2 sisi atau lebih screen :C6",
+        "is_stock": True,
+        "qty": "2000 pcs",
+        "stock": "[jeli julid] sablon 22 Hok D",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "warung sleko",
+        "customer": "Eki",
+        "deadline": "Rabu, 10 maret  2021",
+        "id": 6135,
+        "image": "https://indowella.com/new/public/",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "500 pcs",
+        "stock": "[warung sleko] sablon  #sterofoam merk Lux L01",
+        "warna": "merah -"
+    },
+    {
+        "brand": "belis",
+        "customer": "pungky",
+        "deadline": "Jum'at, 12 maret  2021",
+        "id": 6142,
+        "image": "https://indowella.com/new/public/",
+        "info": "2 sisi atau lebih screen :",
+        "is_stock": False,
+        "qty": "1000 pcs",
+        "stock": "[belis] sablon 14 SI D 5g",
+        "warna": "merah -"
+    },
+    {
+        "brand": "balibul aqiqah",
+        "customer": "anieta",
+        "deadline": "Senin, 08 maret  2021",
+        "id": 6102,
+        "image": "https://indowella.com/new/public/",
+        "info": "2 sisi atau lebih screen :",
+        "is_stock": False,
+        "qty": "2000 pcs",
+        "stock": "[balibul aqiqah] sablon  #10 oz hok",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "we got you",
+        "customer": "Bioderma ID tokopedia",
+        "deadline": "Selasa, 09 maret  2021",
+        "id": 6110,
+        "image": "https://indowella.com/new/public/desain/20210305021902-mad.png",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "2000 pcs",
+        "stock": "[we got you] sablon Paper Bag Putih Besar",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "materia medica",
+        "customer": "sofyan",
+        "deadline": "Rabu, 10 maret  2021",
+        "id": 6112,
+        "image": "https://indowella.com/new/public/desain/20210304082953-materia medica 12.JPG",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "2500 pcs",
+        "stock": "[materia medica] sablon 12 Hok D ",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "materia medica",
+        "customer": "sofyan",
+        "deadline": "Rabu, 10 maret  2021",
+        "id": 6113,
+        "image": "https://indowella.com/new/public/desain/20210304083155-materia medica 14.JPG",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "2500 pcs",
+        "stock": "[materia medica] sablon 14 HOKKAKU OV",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "materia medica",
+        "customer": "sofyan",
+        "deadline": "Rabu, 10 maret  2021",
+        "id": 6114,
+        "image": "https://indowella.com/new/public/desain/20210304083332-sablon plastik.JPG",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "500 pcs",
+        "stock": "[materia medica] sablon  #plastik 25*20",
+        "warna": "hitam -"
+    },
+    {
+        "brand": "warkop brewok",
+        "customer": "mas rigel",
+        "deadline": "Selasa, 09 maret  2021",
+        "id": 6119,
+        "image": "https://indowella.com/new/public/desain/20210305020305-warkop brewok.jpg",
+        "info": "1 sisi screen :",
+        "is_stock": False,
+        "qty": "1000 pcs",
+        "stock": "[warkop brewok] sablon Paper Bag Coklat Besar",
+        "warna": "coklat tua -"
+    },
+    {
+        "brand": "oukla coffee",
+        "customer": "diah",
+        "deadline": "Selasa, 09 maret  2021",
+        "id": 6121,
+        "image": "https://indowella.com/new/public/desain/20210305035700-oukla 360ml.JPG",
+        "info": "2 sisi atau lebih screen :",
+        "is_stock": False,
+        "qty": "1000 pcs",
+        "stock": "[oukla coffee] sablon Paper Bowl 360",
+        "warna": "biru,coklat hitam"
+    }
+]
 def loadImageWebPublic( url, w=0, h=0, mode=0):
     global location
     r = requests.get(url)
