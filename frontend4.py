@@ -12,6 +12,7 @@ c=0
 z=0
 flag =0
 starFlag=0
+
 stock=False
 operator=""
 lontong=Tk()
@@ -20,15 +21,14 @@ SCREENHEIGHT = int(lontong.winfo_screenheight())
 
 
 def splitter(s):
-    
-    total=0
+    total =0
     result=""
     c = s.split()
     for i in range(len(c)):
         counter=len(c[i])
         total=total+counter
        # print(total)
-        if(total<10):
+        if(total<15):
             result=result+" "+c[i]
         else :
             result=result+"\n"+c[i]
@@ -37,7 +37,7 @@ def splitter(s):
     #print(result)
    # print(x)
     #print(counter)
-#print(splitter(result[0]['info']))
+print(splitter(result[1]['stock']))
 
 #print(SCREENWIDTH)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
@@ -167,7 +167,7 @@ class Beranda:
         self.labelInfo.place(x=0.12*self.sW,y=3*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
        
         self.labelBrand.place(x=0.28*self.sW,y=0*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
-        self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.09*self.sW,height=0.06*self.sH)
+        self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         
         self.labelDeadline.config(text=splitter(hasil['deadline']))
