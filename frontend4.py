@@ -5,7 +5,11 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from cloud import result
+<<<<<<< HEAD
 
+=======
+from cloud import *
+>>>>>>> loadImage
 tertekanFlag=0
 k=0
 c=0
@@ -15,7 +19,7 @@ starFlag=0
 
 stock=False
 operator=""
-lontong=Tk()
+
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 
@@ -273,7 +277,7 @@ b.showLayar()
 #     appendCad()
 
 def appendCad():
-        global  btnTask,k,result
+        global  btnTask,k,result,gambar
         maksJob=7
         kontainer=1
         #print(len(result))
@@ -296,8 +300,11 @@ def appendCad():
         pnjangBtn=0.843 * b.sW
         
         btnTask =[0 for x in range(88)]
+        gambar=[0 for y in range(60)]
         for i in range(k):
             btnTask[i] = Button(b.frame,text="hallo "+str(i))
+
+
             
             #btnTask[i].config(command=lambda:b.tertekan(result[i]))
             
@@ -342,31 +349,21 @@ appendCad()
 
 for i in range(k):
     x=i
+    try:
+        gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
+        btnTask[i].config(image=gambar[x])
+        print("ada gambar")
+    except:
+        print("no Image")
+        photo=Image.open("no image.png")
+        photo =photo.resize((80, 80), Image.ANTIALIAS)
+        gambar[x]= ImageTk.PhotoImage(photo)
+        btnTask[i].config(image=gambar[x])
+    print("luar try")
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
-    btnTask[i].config(text=result[x]['brand'])
-    # if i==0:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[0]))
-    # elif i==1:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[1]))
-    # elif i==2:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[2]))
-    # elif i==3:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[3]))
-    # elif i==4:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[4]))
-    # elif i==5:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[5]))
-    # elif i==6:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[6]))
-    # elif i==7:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[7]))
-    # elif i==8:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[8]))
-    # elif i==9:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[9]))
-    # elif i==10:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[10]))
-    # elif i==11:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[11])) 
+    
+
 print(result[0]['is_stock'])
+
+#btnTask[0].config(image=gambar10)
 lontong.mainloop()
