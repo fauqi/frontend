@@ -6,7 +6,6 @@ from tkinter import messagebox
 from PIL import ImageTk, Image
 from cloud import result
 
-print(lontong itu enak)
 tertekanFlag=0
 k=0
 c=0
