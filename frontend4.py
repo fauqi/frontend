@@ -5,11 +5,8 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from cloud import result
-<<<<<<< HEAD
-
-=======
 from cloud import *
->>>>>>> loadImage
+
 tertekanFlag=0
 k=0
 c=0
