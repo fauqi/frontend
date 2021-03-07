@@ -273,7 +273,7 @@ b.showLayar()
 #     appendCad()
 
 def appendCad():
-        global  btnTask,k,result
+        global  btnTask,k,result,gambar
         maksJob=7
         kontainer=1
         #print(len(result))
@@ -296,8 +296,11 @@ def appendCad():
         pnjangBtn=0.843 * b.sW
         
         btnTask =[0 for x in range(88)]
+        gambar=[0 for y in range(60)]
         for i in range(k):
             btnTask[i] = Button(b.frame,text="hallo "+str(i))
+
+
             
             #btnTask[i].config(command=lambda:b.tertekan(result[i]))
             
@@ -342,10 +345,21 @@ appendCad()
 
 for i in range(k):
     x=i
+    try:
+        gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
+        btnTask[i].config(image=gambar[x])
+        print("ada gambar")
+    except:
+        print("no Image")
+        photo=Image.open("no image.png")
+        photo =photo.resize((80, 80), Image.ANTIALIAS)
+        gambar[x]= ImageTk.PhotoImage(photo)
+        btnTask[i].config(image=gambar[x])
+    print("luar try")
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
-    btnTask[i].config(text=result[x]['brand'])
+    
 
 print(result[0]['is_stock'])
-gambar10=loadImageWebPublic(result[0]['image'],0,80)
-btnTask[0].config(image=gambar10)
+
+#btnTask[0].config(image=gambar10)
 lontong.mainloop()
