@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from cloud import result
-
+from cloud import *
 tertekanFlag=0
 k=0
 c=0
@@ -15,7 +15,7 @@ starFlag=0
 
 stock=False
 operator=""
-lontong=Tk()
+
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 
@@ -344,29 +344,8 @@ for i in range(k):
     x=i
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
     btnTask[i].config(text=result[x]['brand'])
-    # if i==0:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[0]))
-    # elif i==1:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[1]))
-    # elif i==2:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[2]))
-    # elif i==3:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[3]))
-    # elif i==4:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[4]))
-    # elif i==5:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[5]))
-    # elif i==6:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[6]))
-    # elif i==7:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[7]))
-    # elif i==8:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[8]))
-    # elif i==9:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[9]))
-    # elif i==10:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[10]))
-    # elif i==11:
-    #     btnTask[i].config(command=lambda:b.tertekan(result[11])) 
+
 print(result[0]['is_stock'])
+gambar10=loadImageWebPublic(result[0]['image'],0,80)
+btnTask[0].config(image=gambar10)
 lontong.mainloop()

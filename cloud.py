@@ -5,7 +5,7 @@ import urllib3
 from tkinter import*
 from PIL import ImageTk, Image
 import io
-
+lontong=Tk()
 # dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
 # dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
 # #print(dataku.json())
@@ -161,12 +161,8 @@ def loadImageWebPublic( url, w=0, h=0, mode=0):
 
 
 # frame.place(x=0,y=0,width=500,height=500)
-# photo=Image.open("beranda.png")
-# photo = photo.resize((200, 100), Image.ANTIALIAS)
-# gambar = ImageTk.PhotoImage(photo)
 
-# gambar=loadImageWebPublic(result[1]['image'],0,80)
-# labelImage=Label(frame,text="LONTONG",height=100,width=200,bg="BLUE",image=gambar)
+# labelImage=Label(frame,text="LONTONG",height=100,width=200,bg="BLUE",image=gambar10)
 # labelImage.place(x=0,y=0,height=100,width=200,anchor=NW)
 # m.mainloop()
 
