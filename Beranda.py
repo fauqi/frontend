@@ -105,6 +105,7 @@ class Beranda:
             self.label2.place(x=0,y=0,height=self.sH*0.79,width=self.sW*0.41,anchor=NW)
             self.photoLabel=Label(self.frame2,bg="RED")
             self.photoLabel.place(x=0.062*self.sW,y=0.46*self.sH,width=0.3*self.sW,height=0.21*self.sH)
+
     #startButton
         self.photo10=Image.open("!start.png")
         self.photo10=self.photo10.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
@@ -176,6 +177,15 @@ class Beranda:
         self.labelStock.config(text=splitter(self.dataReady['stock']))
         self.labelWarna.config(text=splitter(self.dataReady['warna']))
         
+        try:
+            self.picturePopup=loadImageWebPublic(self.dataReady['image'],0,0.21*self.sH)
+            self.photoLabel.config(image=self.picturePopup)
+        except:
+            self.fotoLabel=Image.open("no image.png")
+            self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
+            self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
+            print("no image bro")
+            self.photoLabel.config(image=self.gambarLabel)
     def startPressed(self):
         global starFlag,tertekanFlag
         if starFlag==0:

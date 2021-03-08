@@ -13,44 +13,44 @@ dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
 print(dataku_objek)
 result =dataku.json()
 
-result = [
-    {
-        "brand": "jeli julid",
-        "customer": "fahmi",
-        "deadline": "Sabtu, 06 maret  2021",
-        "id": 6131,
-        "image": "https://indowella.com/new/public/desain/20210106143031-jelijul.PNG",
-        "info": "2 sisi atau lebih screen :C6",
-        "is_stock": True,
-        "qty": "2000 pcs",
-        "stock": "[jeli julid] sablon 22 Hok D",
-        "warna": "hitam -"
-    },
-    {
-        "brand": "warung sleko",
-        "customer": "Eki",
-        "deadline": "Rabu, 10 maret  2021",
-        "id": 6135,
-        "image": "https://indowella.com/new/public/",
-        "info": "1 sisi screen :",
-        "is_stock": False,
-        "qty": "500 pcs",
-        "stock": "[warung sleko] sablon  #sterofoam merk Lux L01",
-        "warna": "merah -"
-    },
-    {
-        "brand": "belis",
-        "customer": "pungky",
-        "deadline": "Jum'at, 12 maret  2021",
-        "id": 6142,
-        "image": "https://indowella.com/new/public/",
-        "info": "2 sisi atau lebih screen :",
-        "is_stock": False,
-        "qty": "1000 pcs",
-        "stock": "[belis] sablon 14 SI D 5g",
-        "warna": "merah -"
-    }
-]
+# result = [
+#     {
+#         "brand": "jeli julid",
+#         "customer": "fahmi",
+#         "deadline": "Sabtu, 06 maret  2021",
+#         "id": 6131,
+#         "image": "https://indowella.com/new/public/desain/20210106143031-jelijul.PNG",
+#         "info": "2 sisi atau lebih screen :C6",
+#         "is_stock": True,
+#         "qty": "2000 pcs",
+#         "stock": "[jeli julid] sablon 22 Hok D",
+#         "warna": "hitam -"
+#     },
+#     {
+#         "brand": "warung sleko",
+#         "customer": "Eki",
+#         "deadline": "Rabu, 10 maret  2021",
+#         "id": 6135,
+#         "image": "https://indowella.com/new/public/",
+#         "info": "1 sisi screen :",
+#         "is_stock": False,
+#         "qty": "500 pcs",
+#         "stock": "[warung sleko] sablon  #sterofoam merk Lux L01",
+#         "warna": "merah -"
+#     },
+#     {
+#         "brand": "belis",
+#         "customer": "pungky",
+#         "deadline": "Jum'at, 12 maret  2021",
+#         "id": 6142,
+#         "image": "https://indowella.com/new/public/",
+#         "info": "2 sisi atau lebih screen :",
+#         "is_stock": False,
+#         "qty": "1000 pcs",
+#         "stock": "[belis] sablon 14 SI D 5g",
+#         "warna": "merah -"
+#     }
+# ]
 def loadImageWebPublic( url, w=0, h=0, mode=0):
     global location
     r = requests.get(url)
