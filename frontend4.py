@@ -35,9 +35,7 @@ def splitter(s):
             result=result+"\n"+c[i]
             total=0
     return (result)
-    #print(result)
-   # print(x)
-    #print(counter)
+
 print(splitter(result[1]['stock']))
 
 #print(SCREENWIDTH)
