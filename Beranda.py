@@ -1,5 +1,6 @@
 from cloud import *
 from cloud import result
+from tkinter import messagebox
 tertekanFlag=0
 k=0
 c=0
@@ -60,21 +61,26 @@ class Beranda:
         self.userPhoto=Image.open("user.png")
         self.userPhoto= self.userPhoto.resize((int(0.055*self.sW),int(0.078*self.sH)), Image.ANTIALIAS)
         self.userGambar= ImageTk.PhotoImage(self.userPhoto)
-    def switch(self,hasil):
+
+    def switch(self,dataReady):
         global stock
-        if hasil['is_stock']== True:
-            hasil['is_stock']=False
+        if self.dataReady['is_stock']== True:
+            self.dataReady['is_stock']=False
             self.switch_btn.config(image=self.switch_tidak_ada)
         else:
             self.switch_btn.config(image=self.switch_ada)
-            hasil['is_stock']=True
+            self.dataReady['is_stock']=True
     def tertekan(self,hasil,identify):
         global stock,tertekanFlag
         self.identify=identify
         self.url = "https://indowella.com/new/public/api/v1/get-project?id="+ str(identify)
         self.data= requests.get(self.url)
         self.dataReady  = self.data.json()
+        dataReady=self.dataReady
+        
         print(self.dataReady['image'])
+
+        
         if tertekanFlag==0:
             tertekanFlag=1
             self.hasil=hasil
@@ -82,7 +88,8 @@ class Beranda:
             self.frame2=Frame(self.master)
             
             self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
-            
+
+
         #ngebuat labelnye
     
 
@@ -96,6 +103,8 @@ class Beranda:
             
             self.label2 = Label(self.frame2,text="LONTONG",bg="WHITE",image=self.gambar3,borderwidth=4)
             self.label2.place(x=0,y=0,height=self.sH*0.79,width=self.sW*0.41,anchor=NW)
+            self.photoLabel=Label(self.frame2,bg="RED")
+            self.photoLabel.place(x=0.062*self.sW,y=0.46*self.sH,width=0.3*self.sW,height=0.21*self.sH)
     #startButton
         self.photo10=Image.open("!start.png")
         self.photo10=self.photo10.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
@@ -135,9 +144,9 @@ class Beranda:
         self.photo7=Image.open("switch_tidak_ada.png")
         self.photo7= self.photo7.resize((int(0.06*self.sW),int(0.077*self.sH)), Image.ANTIALIAS)
         self.switch_tidak_ada= ImageTk.PhotoImage(self.photo7)
-        self.switch_btn = Button(self.frame2,bg="WHITE",image=self.switch_tidak_ada,borderwidth=0,command=lambda:self.switch(hasil))
+        self.switch_btn = Button(self.frame2,bg="WHITE",image=self.switch_tidak_ada,borderwidth=0,command=lambda:self.switch(self.dataReady))
         self.switch_btn.place(x=0.19*self.sW,y=0.03*self.sH,width=0.06*self.sW,height=0.077*self.sH)
-        if hasil['is_stock']==True:
+        if self.dataReady['is_stock']==True:
             self.switch_btn.config(image=self.switch_ada)
         else:
             self.switch_btn.config(image=self.switch_tidak_ada)
@@ -159,13 +168,13 @@ class Beranda:
         self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         
-        self.labelDeadline.config(text=splitter(hasil['deadline']))
-        self.labelCustomer.config(text=splitter(hasil['customer']))
-        self.labelQty.config(text=splitter(hasil['qty']))
-        self.labelInfo.config(text=splitter(hasil['info']))
-        self.labelBrand.config(text=splitter(hasil['brand']))
-        self.labelStock.config(text=splitter(hasil['stock']))
-        self.labelWarna.config(text=splitter(hasil['warna']))
+        self.labelDeadline.config(text=splitter(self.dataReady['deadline']))
+        self.labelCustomer.config(text=splitter(self.dataReady['customer']))
+        self.labelQty.config(text=splitter(self.dataReady['qty']))
+        self.labelInfo.config(text=splitter(self.dataReady['info']))
+        self.labelBrand.config(text=splitter(self.dataReady['brand']))
+        self.labelStock.config(text=splitter(self.dataReady['stock']))
+        self.labelWarna.config(text=splitter(self.dataReady['warna']))
         
     def startPressed(self):
         global starFlag,tertekanFlag
