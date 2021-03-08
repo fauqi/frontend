@@ -4,37 +4,18 @@ import urllib3
 from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
-from appendCad import *
-
-tertekanFlag=0
-k=0
-c=0
-z=0
-flag =0
-starFlag=0
-
-stock=False
-operator=""
+from Beranda import *
 
 
 
 
-def splitter(s):
-    total =0
-    result=""
-    c = s.split()
-    for i in range(len(c)):
-        counter=len(c[i])
-        total=total+counter
-       # print(total)
-        if(total<15):
-            result=result+" "+c[i]
-        else :
-            result=result+"\n"+c[i]
-            total=0
-    return (result)
 
-print(splitter(result[1]['stock']))
+
+
+
+
+
+
 
 #print(SCREENWIDTH)
 b=Beranda(lontong)
@@ -123,16 +104,16 @@ appendCad()
 
 for i in range(k):
     x=i
-    try:
-        gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
-        btnTask[i].config(image=gambar[x])
-        print("ada gambar")
-    except:
-        print("no Image")
-        photo=Image.open("no image.png")
-        photo =photo.resize((80, 80), Image.ANTIALIAS)
-        gambar[x]= ImageTk.PhotoImage(photo)
-        btnTask[i].config(image=gambar[x])
+    # try:
+    #     gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
+    #     btnTask[i].config(image=gambar[x])
+    #     print("ada gambar")
+    # except:
+    #     print("no Image")
+    #     photo=Image.open("no image.png")
+    #     photo =photo.resize((80, 80), Image.ANTIALIAS)
+    #     gambar[x]= ImageTk.PhotoImage(photo)
+    #     btnTask[i].config(image=gambar[x])
     print("luar try")
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
     
