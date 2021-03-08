@@ -7,6 +7,7 @@ from PIL import ImageTk, Image
 from Beranda import *
 
 #print(SCREENWIDTH)
+
 b=Beranda(lontong)
 b.showLayar()
 
@@ -96,18 +97,18 @@ for i in range(k):
     try:
         gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
         btnTask[i].config(image=gambar[x])
-        print("ada gambar")
+       # print("ada gambar")
     except:
         print("no Image")
         photo=Image.open("no image.png")
         photo =photo.resize((80, 80), Image.ANTIALIAS)
         gambar[x]= ImageTk.PhotoImage(photo)
         btnTask[i].config(image=gambar[x])
-    print("luar try")
+    #print("luar try")
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
     
 
-print(result[0]['is_stock'])
+#print(result[0]['is_stock'])
 
 #btnTask[0].config(image=gambar10)
 lontong.mainloop()
