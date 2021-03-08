@@ -73,8 +73,8 @@ class Beranda:
         self.identify=identify
         self.url = "https://indowella.com/new/public/api/v1/get-project?id="+ str(identify)
         self.data= requests.get(self.url)
-        self.dataReady  = json.dumps(self.data.json(),sort_keys=True,indent=4)
-        print(self.dataReady)
+        self.dataReady  = self.data.json()
+        print(self.dataReady['image'])
         if tertekanFlag==0:
             tertekanFlag=1
             self.hasil=hasil
