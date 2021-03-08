@@ -6,17 +6,6 @@ from tkinter import messagebox
 from PIL import ImageTk, Image
 from Beranda import *
 
-
-
-
-
-
-
-
-
-
-
-
 #print(SCREENWIDTH)
 b=Beranda(lontong)
 b.showLayar()

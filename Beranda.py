@@ -26,7 +26,7 @@ def splitter(s):
             result=result+"\n"+c[i]
             total=0
     return (result)
-    
+
 class Beranda:
     def __init__(self,master):
         self.master=master
@@ -71,7 +71,10 @@ class Beranda:
     def tertekan(self,hasil,identify):
         global stock,tertekanFlag
         self.identify=identify
-        print(identify)
+        self.url = "https://indowella.com/new/public/api/v1/get-project?id="+ str(identify)
+        self.data= requests.get(self.url)
+        self.dataReady  = json.dumps(self.data.json(),sort_keys=True,indent=4)
+        print(self.dataReady)
         if tertekanFlag==0:
             tertekanFlag=1
             self.hasil=hasil

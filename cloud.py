@@ -6,12 +6,12 @@ from tkinter import*
 from PIL import ImageTk, Image
 import io
 lontong=Tk()
-# dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
-# dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
-# #print(dataku.json())
-# dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
-# print(dataku_objek)
-# result =dataku.json()
+#dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
+dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
+#print(dataku.json())
+dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
+print(dataku_objek)
+result =dataku.json()
 
 result = [
     {
