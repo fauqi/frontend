@@ -64,16 +64,19 @@ class Beranda:
 
     def switch(self,dataReady):
         global stock
+        url = "/api/v1/mutation-stock"
         if self.dataReady['is_stock']== True:
-            self.dataReady['is_stock']=False
+            query = dict(zip(( 'id','is_stock'), (self.identify,"0")))
+            
             self.switch_btn.config(image=self.switch_tidak_ada)
         else:
             self.switch_btn.config(image=self.switch_ada)
-            self.dataReady['is_stock']=True
+            query = dict(zip(( 'id','is_stock'), (self.identify,"1")))
+        httpPost(url,query)
     def tertekan(self,hasil,identify):
-        global stock,tertekanFlag
+        global stock,tertekanFlag,server
         self.identify=identify
-        self.url = "https://indowella.com/new/public/api/v1/get-project?id="+ str(identify)
+        self.url = server+"/api/v1/get-project?id="+ str(identify)
         self.data= requests.get(self.url)
         self.dataReady  = self.data.json()
         dataReady=self.dataReady
@@ -115,7 +118,7 @@ class Beranda:
         self.startPhoto=ImageTk.PhotoImage(self.photo3)
         self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=self.startPressed)
         self.startButton.place(x=0.08*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
-        if starFlag==1:
+        if self.dataReady['is_start']==True:
             self.startButton.config(image=self.startPhoto2)
 
     #finishButton
@@ -186,16 +189,22 @@ class Beranda:
             self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
             print("no image bro")
             self.photoLabel.config(image=self.gambarLabel,bg="WHITE")
+
     def startPressed(self):
         global starFlag,tertekanFlag
-        if starFlag==0:
+        url="/api/v1/start-project"
+        self.a = self.dataReady['is_start']
+        print(self.a)
+        if self.dataReady['is_start']==False:
             self.frame2.destroy()
             tertekanFlag=0
-            starFlag=1
+            query= dict(zip(( 'id',""), (self.identify,"")))
+            httpPost(url, query)
+
         else:
             self.startButton.config(command=self.nul)
             self.startButton.config(image=self.startPhoto2)
-
+        
     def nul(self):
         pass
     def closePressed(self):
