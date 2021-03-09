@@ -10,20 +10,20 @@ from Beranda import *
 
 b=Beranda(lontong)
 b.showLayar()
-jumlahJob=0
+jumlahJob=len(result)
 
-def increment():
-    global jumlahJob
+# def increment():
+#     global jumlahJob
     
-   # print(k)
-    for i in range(jumlahJob):
-        btnTask[i].destroy()
-    jumlahJob=jumlahJob+1
-    appendCad(1,3)
+#    # print(k)
+#     for i in range(jumlahJob):
+#         btnTask[i].destroy()
+#     jumlahJob=jumlahJob+1
+#     appendCad(1,3)
 
 def listKaryawan():
-    tryButton = Button(b.frame,text= "mbak bi",command = increment)
-    tryButton.place(x=200,y=50,width=50,height=50)
+    # tryButton = Button(b.frame,text= "mbak bi",command = increment)
+    # tryButton.place(x=200,y=50,width=50,height=50)
     
     labelUser=len(b.pegawai)
 
@@ -101,25 +101,27 @@ def appendCad(bariskaryawan,kontainer=1):
             #     e=i-21
             #     btnTask[i].place(x=e*(((pnjangBtn-((7+1)*0.01*b.sW))/7)+0.01*b.sW)+((0.163*b.sW)),y=0.7*b.sH,width=(pnjangBtn-((0.01*b.sW)+((7+1)*0.01*b.sW)))/7,height=0.158*b.sH)
 
+appendCad(1,4)
+for i in range(jumlahJob):
 
-# for i in range(len(result)):
-#     x=i
-#     try:
-#         gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
-#         btnTask[i].config(image=gambar[x])
-#        # print("ada gambar")
-#     except:
-#         print("no Image")
-#         photo=Image.open("no image.png")
-#         photo =photo.resize((80, 80), Image.ANTIALIAS)
-#         gambar[x]= ImageTk.PhotoImage(photo)
-#         btnTask[i].config(image=gambar[x])
-#     #print("luar try")
-#     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
+    x=i
+    try:
+        gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
+        btnTask[i].config(image=gambar[x])
+       # print("ada gambar")
+    except:
+        print("no Image")
+        photo=Image.open("no image.png")
+        photo =photo.resize((80, 80), Image.ANTIALIAS)
+        gambar[x]= ImageTk.PhotoImage(photo)
+        btnTask[i].config(image=gambar[x])
+    #print("luar try")
+    btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
     
 
 #print(result[0]['is_stock'])
 
 #btnTask[0].config(image=gambar10)
 listKaryawan()
+
 lontong.mainloop()

@@ -260,7 +260,7 @@ class Beranda:
             tertekanFlag=0
             url = "/api/v1/production-stock"
             query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],'1')))
-            appendCad()
+            #appendCad()
     def enter(self):
         global operator
         self.qty=operator
