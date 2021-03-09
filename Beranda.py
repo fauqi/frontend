@@ -258,14 +258,21 @@ class Beranda:
         if response==True:
             self.frame2.destroy()
             tertekanFlag=0
+            url = "/api/v1/production-stock"
+            query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],'1')))
+            appendCad()
     def enter(self):
         global operator
         self.qty=operator
         url = "/api/v1/production-stock"
         query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,'1')))
-        operator=""
-        httpPost(url,query)
-        self.frame3.destroy()
+        response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah mengerjakan "+self.qty+" pcs?")
+        #print(response)
+        if response==True:
+            self.frame3.destroy()
+            operator=""
+            httpPost(url,query)
+            self.frame3.destroy()
     def Delpressed(self):
         global operator
         operator=""
@@ -273,7 +280,6 @@ class Beranda:
     def input(self,x):
         global operator
         operator=operator+str(x)
-
         #print(operator)
         self.kalLab.config(text=operator)
       
