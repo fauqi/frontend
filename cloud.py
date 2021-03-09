@@ -6,8 +6,10 @@ from tkinter import*
 from PIL import ImageTk, Image
 import io
 lontong=Tk()
+server = "https://indowella.com/new/public"
+local = "http://192.168.0.9:8000"
 #dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
-dataku = requests.get("https://indowella.com/new/public/api/v1/get-project")
+dataku = requests.get("http://192.168.0.9:8000/api/v1/get-project")
 #print(dataku.json())
 dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
 print(dataku_objek)
