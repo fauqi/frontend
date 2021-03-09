@@ -260,9 +260,12 @@ class Beranda:
             tertekanFlag=0
     def enter(self):
         global operator
-        self.frame3.destroy()
-        #print(operator)
+        self.qty=operator
+        url = "/api/v1/production-stock"
+        query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,'1')))
         operator=""
+        httpPost(url,query)
+        self.frame3.destroy()
     def Delpressed(self):
         global operator
         operator=""
