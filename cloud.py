@@ -5,9 +5,31 @@ import urllib3
 from tkinter import*
 from PIL import ImageTk, Image
 import io
+from urllib import request, parse
+
+#server = "https://indowella.com/new/public"
+server = "http://192.168.0.9:8000"
 lontong=Tk()
-server = "https://indowella.com/new/public"
-local = "http://192.168.0.9:8000"
+def httpPost(url, query):
+    global server
+    
+    print(server+url)
+    print(query)
+    data = parse.urlencode(query).encode()
+    req = request.Request(server + url, data=data)  # this will make the method "POST"
+    resp = request.urlopen(req)
+    response = resp.read()
+    hasil = response.decode("utf-8")
+    return(print(hasil))
+
+
+   
+
+url = "/api/v1/mutation-stock"
+query = dict(zip(( 'id','is_stock'), ("5530","1")))
+httpPost(url,query)
+
+
 #dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
 dataku = requests.get("http://192.168.0.9:8000/api/v1/get-project")
 #print(dataku.json())
