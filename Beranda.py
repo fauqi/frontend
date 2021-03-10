@@ -13,7 +13,7 @@ SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 
-def splitter(s):
+def splitter(s,maksChar):
     total =0
     result=""
     c = s.split()
@@ -21,7 +21,7 @@ def splitter(s):
         counter=len(c[i])
         total=total+counter
        # print(total)
-        if(total<15):
+        if(total<maksChar):
             result=result+" "+c[i]
         else :
             result=result+"\n"+c[i]
@@ -172,13 +172,13 @@ class Beranda:
         self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         
-        self.labelDeadline.config(text=splitter(self.dataReady['deadline']))
-        self.labelCustomer.config(text=splitter(self.dataReady['customer']))
-        self.labelQty.config(text=splitter(self.dataReady['qty']))
-        self.labelInfo.config(text=splitter(self.dataReady['info']))
-        self.labelBrand.config(text=splitter(self.dataReady['brand']))
-        self.labelStock.config(text=splitter(self.dataReady['stock']))
-        self.labelWarna.config(text=splitter(self.dataReady['warna']))
+        self.labelDeadline.config(text=splitter(self.dataReady['deadline'],15))
+        self.labelCustomer.config(text=splitter(self.dataReady['customer'],15))
+        self.labelQty.config(text=splitter(self.dataReady['qty'],15))
+        self.labelInfo.config(text=splitter(self.dataReady['info'],15))
+        self.labelBrand.config(text=splitter(self.dataReady['brand'],15))
+        self.labelStock.config(text=splitter(self.dataReady['stock'],15))
+        self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
         
         try:
             self.picturePopup=loadImageWebPublic(self.dataReady['image'],0,0.21*self.sH)
@@ -260,7 +260,7 @@ class Beranda:
             tertekanFlag=0
             url = "/api/v1/production-stock"
             query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],'1')))
-            #appendCad()
+            appendCad(0,4)
     def enter(self):
         global operator
         self.qty=operator
@@ -282,6 +282,96 @@ class Beranda:
         operator=operator+str(x)
         #print(operator)
         self.kalLab.config(text=operator)
+b=Beranda(lontong)
+b.showLayar()
+jumlahJob=len(result)
+def appendCad(bariskaryawan,kontainer=1):
+    global jumlahJob
+    global  btnTask,k,result,gambar
+    maksJob=7
+    #print(len(result))
+    k=len(result)
+
+    wContainer=0.843 * b.sW
+    btnTask =[0 for x in range(88)]
+    gambar=[0 for y in range(60)]
+    containerJob=[0 for y in range(kontainer)]
+    itembaris=jumlahJob/kontainer
+    if itembaris<maksJob:
+        k=7
+        kelebihan=0
+    else:
+        k=int(jumlahJob/kontainer)
+        kelebihan= jumlahJob%kontainer
+    lastBaris=0
+
+    for i in range(kontainer):
+        if kelebihan>0:
+            containerJob[i]=k+1
+            kelebihan=kelebihan-1
+        else :
+            containerJob[i]=k
+        print("jumlah container"+str(i)+"="+str(containerJob[i]))
+    jumlahItem=containerJob[0]
+    icontainer=0
+    x=0
+
+    print("mulai \r\n")
+    for i in range(jumlahJob):
+        btnTask[i] = Button(b.frame,text="hallo "+str(i))            
+        btnTask[i].config(command=lambda:b.tertekan(result[i]))
+        
+        if(x>=(containerJob[icontainer]-1)):
+            icontainer=icontainer+1
+        sigmaContainerTerlewat=0
+        for m in range(icontainer):
+            sigmaContainerTerlewat=sigmaContainerTerlewat+containerJob[m]
+
+        x=i-sigmaContainerTerlewat
+        
+        panjangButton=(wContainer-((0.01*b.sW)+((jumlahItem+1)*0.01*b.sW)))/containerJob[icontainer]
+    
+        offsetH=0.164*b.sH + (bariskaryawan*0.180*b.sH)
+        offsetW=0.163*b.sW            
+        btnTask[i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=((int(icontainer)*0.180*b.sH)+offsetH),width=panjangButton,height=0.158*b.sH) 
+        print("i="+str(i) +",x="+str(x)+",sigma="+str(sigmaContainerTerlewat) +",icontainer= " + str(icontainer))
+        x=i
+        # try:
+        #     gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
+        #     btnTask[i].config(image=gambar[x])
+    
+        # except:
+        #     print("no Image")
+        #     photo=Image.open("no image.png")
+        #     photo =photo.resize((80, 80), Image.ANTIALIAS)
+        #     gambar[x]= ImageTk.PhotoImage(photo)
+        #     btnTask[i].config(image=gambar[x])
+        text = splitter(result[i]['stock'],8)
+        btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id),text =text,bg ="#11698E",fg="WHITE",font='Roboto 12 bold')
+def listKaryawan():
+    # tryButton = Button(b.frame,text= "mbak bi",command = increment)
+    # tryButton.place(x=200,y=50,width=50,height=50)
+    
+    labelUser=len(b.pegawai)
+
+    labelPegawai=[0 for z in range(5)]
+    labelUser=[0 for y in range(5)]
+    for j in range(len(b.pegawai)):
+        labelPegawai[j]= Label(b.frame,text = b.pegawai[j],bg="WHITE",fg='#1687A7',font=10)
+        labelPegawai[j].place(x=0.085*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
+        labelUser[j]= Label(b.frame,text="Lontong",image = b.userGambar,bg="WHITE")
+        labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
+    
+
+
+          
+appendCad(0,4)
+
+
+    
+listKaryawan()
+
+lontong.mainloop()
       
 
 
