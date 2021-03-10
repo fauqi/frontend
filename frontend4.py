@@ -6,7 +6,6 @@ from tkinter import *
 from PIL import ImageTk, Image
 from Beranda import *
 
-#print(SCREENWIDTH)
 
 b=Beranda(lontong)
 b.showLayar()
@@ -40,7 +39,6 @@ def appendCad(bariskaryawan,kontainer=1):
         global jumlahJob
         global  btnTask,k,result,gambar
         maksJob=7
-        #print(len(result))
         k=len(result)
   
         wContainer=0.843 * b.sW
@@ -89,17 +87,7 @@ def appendCad(bariskaryawan,kontainer=1):
 
           
 
-
-            # elif i>6 and i <=13:
-            #     c=i-7
-            #     #print(c)
-            #     btnTask[i].place(x=c*(((pnjangBtn-((7+1)*0.01*b.sW))/7)+0.01*b.sW)+((0.163*b.sW)),y=0.347*b.sH,width=(pnjangBtn-((0.01*b.sW)+((7+1)*0.01*b.sW)))/7,height=0.158*b.sH)
-            # elif i>13 and i<=20:
-            #     d=i-14
-            #     btnTask[i].place(x=d*(((pnjangBtn-((7+1)*0.01*b.sW))/7)+0.01*b.sW)+((0.163*b.sW)),y=0.52*b.sH,width=(pnjangBtn-((0.01*b.sW)+((7+1)*0.01*b.sW)))/7,height=0.158*b.sH)
-            # elif i>20:
-            #     e=i-21
-            #     btnTask[i].place(x=e*(((pnjangBtn-((7+1)*0.01*b.sW))/7)+0.01*b.sW)+((0.163*b.sW)),y=0.7*b.sH,width=(pnjangBtn-((0.01*b.sW)+((7+1)*0.01*b.sW)))/7,height=0.158*b.sH)
+(pnjangBtn-((7+1)*0.01*b.sW))/7)+0.01*b.sW)+((0.163*b.sW)),y=0.7*b.sH,width=(pnjangBtn-((0.01*b.sW)+((7+1)*0.01*b.sW)))/7,height=0.158*b.sH)
 
 appendCad(1,4)
 for i in range(jumlahJob):
@@ -108,20 +96,16 @@ for i in range(jumlahJob):
     try:
         gambar[x]=loadImageWebPublic(result[x]['image'],0,80)
         btnTask[i].config(image=gambar[x])
-       # print("ada gambar")
+      
     except:
         print("no Image")
         photo=Image.open("no image.png")
         photo =photo.resize((80, 80), Image.ANTIALIAS)
         gambar[x]= ImageTk.PhotoImage(photo)
         btnTask[i].config(image=gambar[x])
-    #print("luar try")
     btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id))
     
 
-#print(result[0]['is_stock'])
-
-#btnTask[0].config(image=gambar10)
 listKaryawan()
 
 lontong.mainloop()
