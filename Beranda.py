@@ -9,10 +9,14 @@ flag =0
 starFlag=0
 stock=False
 operator=""
+
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
+getKaryawan()
+print(arrayKaryawan[2]['nama'])
 
+#print(url)
 def splitter(s,maksChar):
     total =0
     result=""
@@ -349,15 +353,18 @@ def appendCad(bariskaryawan,kontainer=1):
         text = splitter(result[i]['stock'],8)
         btnTask[i].config(command=lambda x=i,id=result[x]['id']:b.tertekan(result[x],id),text =text,bg ="#11698E",fg="WHITE",font='Roboto 12 bold')
 def listKaryawan():
+    global arrayKaryawan
     # tryButton = Button(b.frame,text= "mbak bi",command = increment)
     # tryButton.place(x=200,y=50,width=50,height=50)
     
-    labelUser=len(b.pegawai)
+    
 
-    labelPegawai=[0 for z in range(5)]
-    labelUser=[0 for y in range(5)]
-    for j in range(len(b.pegawai)):
-        labelPegawai[j]= Label(b.frame,text = b.pegawai[j],bg="WHITE",fg='#1687A7',font=10)
+    labelPegawai=[0 for z in range(len(arrayKaryawan))]
+    labelUser=[0 for y in range(len(arrayKaryawan))]
+   # print(len(arrayKaryawan))
+    for j in range(len(arrayKaryawan)):
+        print(j)
+        labelPegawai[j]= Label(b.frame,text = arrayKaryawan[j]['nama'],bg="WHITE",fg='#1687A7',font=10)
         labelPegawai[j].place(x=0.085*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
         labelUser[j]= Label(b.frame,text="Lontong",image = b.userGambar,bg="WHITE")
         labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
@@ -365,7 +372,11 @@ def listKaryawan():
 
 
           
-appendCad(0,4)
+#
+for karyawan in arrayKaryawan:
+    print(karyawan)
+    url = server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[0]['id'])
+    appendCad(0,1)
 
 
     

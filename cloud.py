@@ -10,6 +10,7 @@ from urllib import request, parse
 #server = "https://indowella.com/new/public"
 server = "http://192.168.0.9:8000"
 lontong=Tk()
+
 def httpPost(url, query):
     global server
     
@@ -20,13 +21,30 @@ def httpPost(url, query):
     resp = request.urlopen(req)
     response = resp.read()
     hasil = response.decode("utf-8")
-    return(print(hasil))
+    return(hasil)
+def httpGet(url, data1):
+    global server
+    url = server + url + data1
+    req = request.Request(url)
+    response = request.urlopen(req)
+    response = response.read()
+    hasil = response.decode("utf-8")
+    return(hasil)
 
+dataku1=requests.get("http://192.168.0.9:8000/api/v1/get-karyawan?bidang=sablon")
+hasil1=dataku1.json()
+arrayKaryawan = [0 for x in range(len(hasil1['msg']))]
+# url = "/api/v1/get-karyawan?bidang=sablon"
+# query = dict(zip(( 'id','name'), ("1","Aji")))
+def getKaryawan():
+    global arrayKaryawan
 
-   
+    #print(hasil1['msg'][0]['id'])
+    
+    for c in range(len(hasil1['msg'])):
+        arrayKaryawan[c]={"nama":hasil1['msg'][c]['name'],"id":hasil1['msg'][c]['id']}
 
-
-
+    
 
 #dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
 dataku = requests.get("http://192.168.0.9:8000/api/v1/get-project")
