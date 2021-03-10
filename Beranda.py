@@ -289,11 +289,11 @@ class Beranda:
 b=Beranda(lontong)
 b.showLayar()
 jumlahJob=len(result)
-def appendCad(bariskaryawan,kontainer=1):
+def appendCad(bariskaryawan,result,kontainer=1):
     global jumlahJob
-    global  btnTask,k,result,gambar
+    global  btnTask,k,gambar
     maksJob=7
-    #print(len(result))
+    print(result)
     k=len(result)
 
     wContainer=0.843 * b.sW
@@ -373,10 +373,13 @@ def listKaryawan():
 
           
 #
-for karyawan in arrayKaryawan:
+for karyawan in range(len(arrayKaryawan)):
     print(karyawan)
-    url = server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[0]['id'])
-    appendCad(0,1)
+    url = server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[karyawan]['id'])
+    result=requests.get(server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[karyawan]['id']))
+    result=result.json()
+    print(len(result))
+    appendCad(karyawan,result,1)
 
 
     
