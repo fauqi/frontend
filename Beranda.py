@@ -382,14 +382,11 @@ def listKaryawan():
         labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
     
 
-
-          
-#
 def karyawanReq():
     for karyawan in range(len(arrayKaryawan)):
        # print(karyawan)
-        url = server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[karyawan]['id'])
-        result=requests.get(server+"/api/v1/get-project?karyawan="+str(arrayKaryawan[karyawan]['id']))
+        url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
+        result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
        # print(len(result))
         appendCad(karyawan,result,1)
