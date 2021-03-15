@@ -279,11 +279,10 @@ class Beranda:
             tertekanFlag=0
             url = "/api/v1/production-stock"
             query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],'1')))
-            url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id'])
+       
             result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
             result=result.json()
-            print(result[0])
-            appendCad(nomor,result,1,delete=1)
+            appendCad(nomor,result,1)
     def enter(self):
         global operator
         self.qty=operator
