@@ -219,7 +219,7 @@ class Beranda:
 
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
         result=result.json()
-        print (result)
+        print (arrayKaryawan[nomor]['id'])
         appendCad(nomor,result,1)
 
         
@@ -288,6 +288,8 @@ class Beranda:
         self.qty=operator
         url = "/api/v1/production-stock"
         query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,'1')))
+        httpPost(url,query)
+
         response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah mengerjakan "+self.qty+" pcs?")
         #print(response)
         if response==True:
