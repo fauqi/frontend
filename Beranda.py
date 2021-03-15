@@ -120,7 +120,7 @@ class Beranda:
         self.photo3=Image.open("start.png")
         self.photo3=self.photo3.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
         self.startPhoto=ImageTk.PhotoImage(self.photo3)
-        self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=self.startPressed)
+        self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=lambda:self.startPressed(nomor))
         self.startButton.place(x=0.08*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
         if self.dataReady['is_start']==True:
             self.startButton.config(image=self.startPhoto2)
@@ -196,7 +196,7 @@ class Beranda:
             #print("no image bro")
             self.photoLabel.config(image=self.gambarLabel,bg="WHITE")
 
-    def startPressed(self):
+    def startPressed(self,nomor):
         global starFlag,tertekanFlag
         url="/api/v1/start-project"
         self.a = self.dataReady['is_start']
@@ -215,7 +215,13 @@ class Beranda:
             httpPost(url, query)
             self.frame2.destroy()
             tertekanFlag=0
-            #self.startButton.config(command=self.cancel)
+        
+
+        result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
+        result=result.json()
+        print (result)
+        appendCad(nomor,result,1)
+
         
     def cancel(self):
         pass
@@ -276,7 +282,8 @@ class Beranda:
             url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id'])
             result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
             result=result.json()
-            appendCad(nomor,result,4,delete=1)
+            print(result[0])
+            appendCad(nomor,result,1,delete=1)
     def enter(self):
         global operator
         self.qty=operator
@@ -305,7 +312,7 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
  
     global  btnTask,k,gambar
     maksJob=7
-    
+
     jumlahJob=len(result)
     
     wContainer=0.843 * b.sW
@@ -363,7 +370,17 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
         #     gambar[x]= ImageTk.PhotoImage(photo)
         #     btnTask[i].config(image=gambar[x])
         text = splitter(result[i]['stock'],8)
-        btnTask[i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan:b.tertekan(result[x],id,nomor),text =text,bg ="#11698E",fg="WHITE",font='Roboto 12 bold')
+        print(result[i]['is_start'])
+        if result[i]['is_start']==True:
+            background="GREEN"
+        else:
+            background="#11698E"
+        btnTask[i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan:b.tertekan(result[x],id,nomor),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
+    if delete==1:
+        print("terdelete ges yak")
+        for l in range(jumlahJob):
+            btnTask[l].destroy()
+
 def listKaryawan():
     global arrayKaryawan
     # tryButton = Button(b.frame,text= "mbak bi",command = increment)
@@ -389,6 +406,7 @@ def karyawanReq():
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
        # print(len(result))
+        print(result)
         appendCad(karyawan,result,1)
 karyawanReq()
 
