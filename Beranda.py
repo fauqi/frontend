@@ -201,7 +201,7 @@ class Beranda:
         url="/api/v1/start-project"
         self.a = self.dataReady['is_start']
 
-        print(self.dataReady['is_start'])
+        #print(self.dataReady['is_start'])
         if self.dataReady['is_start']==False:
             self.frame2.destroy()
             tertekanFlag=0
@@ -209,7 +209,7 @@ class Beranda:
             httpPost(url, query)
 
         elif self.dataReady['is_start']==True:
-            print("cancel tertekan")
+            #print("cancel tertekan")
             url= "/api/v1/cancel-start-project"
             query= dict(zip(( 'id',""), (self.identify,"")))
             httpPost(url, query)
@@ -219,7 +219,7 @@ class Beranda:
 
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
         result=result.json()
-        print (arrayKaryawan[nomor]['id'])
+        #print (arrayKaryawan[nomor]['id'])
         appendCad(nomor,result,1)
 
         
@@ -371,14 +371,14 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
         #     gambar[x]= ImageTk.PhotoImage(photo)
         #     btnTask[i].config(image=gambar[x])
         text = splitter(result[i]['stock'],8)
-        print(result[i]['is_start'])
+        #print(result[i]['is_start'])
         if result[i]['is_start']==True:
             background="GREEN"
         else:
             background="#11698E"
         btnTask[i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan:b.tertekan(result[x],id,nomor),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
     if delete==1:
-        print("terdelete ges yak")
+        #print("terdelete ges yak")
         for l in range(jumlahJob):
             btnTask[l].destroy()
 
@@ -407,7 +407,7 @@ def karyawanReq():
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
        # print(len(result))
-        print(result)
+        #print(result)
         appendCad(karyawan,result,1)
 karyawanReq()
 
