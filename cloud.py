@@ -31,7 +31,7 @@ def httpGet(url, data1):
     hasil = response.decode("utf-8")
     return(hasil)
 
-dataku1=requests.get("http://192.168.100.102:8000/api/v1/get-karyawan?bidang=sablon")
+dataku1=requests.get(server+"/api/v1/get-karyawan?bidang=sablon")
 hasil1=dataku1.json()
 arrayKaryawan = [0 for x in range(len(hasil1['msg']))]
 # url = "/api/v1/get-karyawan?bidang=sablon"
@@ -47,7 +47,7 @@ def getKaryawan():
     
 
 #dataku = requests.get("https://indowella.com/new/public/api/v1/get-customers")
-dataku = requests.get("http://192.168.100.102:8000/api/v1/get-project")
+dataku = requests.get(server+"/api/v1/get-project")
 #print(dataku.json())
 dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
 print(dataku_objek)
