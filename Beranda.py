@@ -9,7 +9,7 @@ flag =0
 starFlag=0
 stock=False
 operator=""
-
+#nyoba commit
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
