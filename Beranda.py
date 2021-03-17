@@ -231,7 +231,7 @@ class Beranda:
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
         result=result.json()
         #print (arrayKaryawan[nomor]['id'])
-        appendCad(nomor,result,1)
+        appendCad(nomor,result['data'],1)
 
         
     def cancel(self):
