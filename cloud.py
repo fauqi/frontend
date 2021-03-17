@@ -8,7 +8,7 @@ import io
 from urllib import request, parse
 #query = dict(zip(( 'id','is_stock'), ("5530","0")))
 #server = "https://indowella.com/new/public"
-server = "http://192.168.100.103:8000"
+server = "http://192.168.100.102:8000"
 lontong=Tk()
 
 def httpPost(url, query):

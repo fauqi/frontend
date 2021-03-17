@@ -428,19 +428,27 @@ def karyawanReq(karyawan):
         print(result)
         karyawan_id = arrayKaryawan[karyawan]['id']
         appendCad(karyawan,result['data'],karyawan_id)
-        lastUpdate=result['last_updated']
-        LastUpdate=Label(b.frame,text = "Last Update:\n "+str(result['last_updated']),bg="WHITE")
-        LastUpdate.place(x=0.85*b.sW,y=0.024*b.sH) 
+
 def refresh():
     
     for i in range(len(arrayKaryawan)):
         karyawanReq(i)
-tryButton = Button(b.frame,text= "mbak bi",command = refresh)
-tryButton.place(x=200,y=50,width=50,height=50)
+# tryButton = Button(b.frame,text= "mbak bi",command = refresh)
+# tryButton.place(x=200,y=50,width=50,height=50)
 
-
+def rutinCekFlag():
+    global lastUpdate
+    result=requests.get(server+"/api/v1/get-update-flag?date="+str(lastUpdate))
+    result=result.json()
+    lastUpdate=result['last_updated']
+    LastUpdateLabel=Label(b.frame,text = "Last Update:\n "+str(lastUpdate),bg="WHITE")
+    LastUpdateLabel.place(x=0.85*b.sW,y=0.024*b.sH) 
+    print(result)
+    if result['flag'] == 1:
+        refresh()
+    b.frame.after(3000,rutinCekFlag)
 refresh()
-
+rutinCekFlag()
     
 listKaryawan()
 
