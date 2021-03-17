@@ -9,6 +9,7 @@ flag =0
 starFlag=0
 stock=False
 operator=""
+lastUpdate=0
 #nyoba commit
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
@@ -78,10 +79,12 @@ class Beranda:
         global stock
         url = "/api/v1/mutation-stock"
         if self.dataReady['is_stock']== True:
+            self.dataReady['is_stock']= False
             query = dict(zip(( 'id','is_stock'), (self.identify,"0")))
             
             self.switch_btn.config(image=self.switch_tidak_ada)
         else:
+            self.dataReady['is_stock']= True
             self.switch_btn.config(image=self.switch_ada)
             query = dict(zip(( 'id','is_stock'), (self.identify,"1")))
         httpPost(url,query)
@@ -279,20 +282,25 @@ class Beranda:
         
     def finishPressed(self,nomor,id_karyawan):
         global tertekanFlag,jumlahJob
-        response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
-        #print(response)
-        print(id_karyawan)
-        if response==True:
-            self.frame2.destroy()
-            tertekanFlag=0
-            url = "/api/v1/production-stock"
-            
-            query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],id_karyawan)))
-            result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
-            httpPost(url,query)
-            result=result.json()
-            # appendCad(nomor,result,1)
-            karyawanReq(nomor)
+        if self.dataReady['is_stock']== False:
+            messagebox.showerror("warning","Silahkan mutasi dulu stocknya")
+            # self.frame2.destroy()
+            # tertekanFlag=0
+        else :
+            response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
+            #print(response)
+            print(id_karyawan)
+            if response==True:
+                self.frame2.destroy()
+                tertekanFlag=0
+                url = "/api/v1/production-stock"
+                
+                query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],id_karyawan)))
+                result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
+                httpPost(url,query)
+                result=result.json()
+                # appendCad(nomor,result,1)
+                karyawanReq(nomor)
     def enter(self,id_karyawan):
         global operator
         self.qty=operator
@@ -412,14 +420,17 @@ def listKaryawan():
     
 
 def karyawanReq(karyawan):
-    
        # print(karyawan)
+        global lastUpdate
         url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
         print(result)
         karyawan_id = arrayKaryawan[karyawan]['id']
-        appendCad(karyawan,result,karyawan_id)
+        appendCad(karyawan,result['data'],karyawan_id)
+        lastUpdate=result['last_updated']
+        LastUpdate=Label(b.frame,text = "Last Update:\n "+str(result['last_updated']),bg="WHITE")
+        LastUpdate.place(x=0.85*b.sW,y=0.024*b.sH) 
 def refresh():
     
     for i in range(len(arrayKaryawan)):
