@@ -8,7 +8,7 @@ import io
 from urllib import request, parse
 #query = dict(zip(( 'id','is_stock'), ("5530","0")))
 #server = "https://indowella.com/new/public"
-server = "http://192.168.100.102:8000"
+server = "http://192.168.100.103:8000"
 lontong=Tk()
 
 def httpPost(url, query):
@@ -50,7 +50,7 @@ def getKaryawan():
 dataku = requests.get(server+"/api/v1/get-project")
 #print(dataku.json())
 dataku_objek = json.dumps(dataku.json(),sort_keys=True,indent=4)
-print(dataku_objek)
+#print(dataku_objek)
 result =dataku.json()
 
 # result = [

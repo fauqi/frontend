@@ -41,6 +41,13 @@ class Beranda:
         self.sW=SCREENWIDTH
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="#f9f9f9")
+        self.showLayar()
+        self.btnTask =[[0 for x in range(88)]  for x in range(5)]
+
+        for i in range(5):
+            for j in range(88):    
+                self.btnTask[i][j] = Button(self.frame,text="hallo")            
+                  
         
     
     def showLayar(self):
@@ -78,9 +85,10 @@ class Beranda:
             self.switch_btn.config(image=self.switch_ada)
             query = dict(zip(( 'id','is_stock'), (self.identify,"1")))
         httpPost(url,query)
-    def tertekan(self,hasil,identify,nomor):
+    def tertekan(self,hasil,identify,nomor,id_karyawan):
         global stock,tertekanFlag,server
         self.identify=identify
+        self.id_karyawan=id_karyawan
         self.url = server+"/api/v1/get-project?id="+ str(identify)
         self.data= requests.get(self.url)
         self.dataReady  = self.data.json()
@@ -132,7 +140,7 @@ class Beranda:
         self.photo8=Image.open("finish.png")
         self.photo8=self.photo8.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
         self.finishPhoto=ImageTk.PhotoImage(self.photo8)
-        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(nomor))
+        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(nomor,id_karyawan))
         self.finishButton.place(x=0.2*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
     #closeButton
         self.photo9=Image.open("close.png")
@@ -144,9 +152,8 @@ class Beranda:
         self.photo4=Image.open("pause.png")
         self.photo4=self.photo4.resize((int(0.045*self.sW),int(0.063*self.sH)),Image.ANTIALIAS)
         self.pausePhoto=ImageTk.PhotoImage(self.photo4)
-        self.pauseButton=Button(self.frame2,image = self.pausePhoto,borderwidth=0,bg="WHITE",command=self.pausePressed)
+        self.pauseButton=Button(self.frame2,image = self.pausePhoto,borderwidth=0,bg="WHITE",command=lambda:self.pausePressed(id_karyawan))
         self.pauseButton.place(x=0.644*(self.sW*0.41),y=(self.sH*0.82)*0.08,width=0.045*self.sW,height=0.063*self.sH,anchor=W)
-
 
             #switch widget
         self.photo6=Image.open("switch_ada.png")
@@ -234,7 +241,7 @@ class Beranda:
         global tertekanFlag
         self.frame2.destroy()
         tertekanflag=0
-    def pausePressed(self):
+    def pausePressed(self,id_karyawan):
         global z
     #kalkulator
         self.frame3=Frame(self.frame2,bg='#1687A7')
@@ -249,7 +256,7 @@ class Beranda:
         self.btnKal0 = Button(self.frame3,text="0",bg="#E7EBF0",fg='#1687A7',font=25,command=lambda:self.input(0))
         self.btnKal0.place(x=0.21*self.sW, y=0.352*self.sH, width=0.055*self.sW, height=0.078*self.sH,anchor= NW)
 
-        self.btnKalEnter = Button(self.frame3,text="\n".join("ENTER"),bg="#E7EBF0",fg='#1687A7',font=25,command = self.enter)
+        self.btnKalEnter = Button(self.frame3,text="\n".join("ENTER"),bg="#E7EBF0",fg='#1687A7',font=25,command = lambda:self.enter(id_karyawan))
         self.btnKalEnter.place(x=0.21*self.sW, y=0.165*self.sH, width=0.055*self.sW, height=0.172*self.sH,anchor= NW)
 
         self.btnKalDel = Button(self.frame3,text="DEL",bg="#E7EBF0",fg='#1687A7',font=25,command=self.Delpressed)
@@ -270,25 +277,27 @@ class Beranda:
         self.kalLab.place(x=0.0097*self.sW,y=0.0117*self.sH,width=0.19*self.sW,height=0.134*self.sH)
         z=0
         
-    def finishPressed(self,nomor):
+    def finishPressed(self,nomor,id_karyawan):
         global tertekanFlag,jumlahJob
         response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
         #print(response)
-        
+        print(id_karyawan)
         if response==True:
             self.frame2.destroy()
             tertekanFlag=0
             url = "/api/v1/production-stock"
-            query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],'1')))
-       
+            
+            query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],id_karyawan)))
             result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
+            httpPost(url,query)
             result=result.json()
-            appendCad(nomor,result,1)
-    def enter(self):
+            # appendCad(nomor,result,1)
+            karyawanReq(nomor)
+    def enter(self,id_karyawan):
         global operator
         self.qty=operator
         url = "/api/v1/production-stock"
-        query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,'1')))
+        query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,id_karyawan)))
         httpPost(url,query)
 
         response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah mengerjakan "+self.qty+" pcs?")
@@ -308,17 +317,20 @@ class Beranda:
         #print(operator)
         self.kalLab.config(text=operator)
 b=Beranda(lontong)
-b.showLayar()
-# jumlahJob=len(result)
-def appendCad(bariskaryawan,result,kontainer=1,delete=0):
- 
-    global  btnTask,k,gambar
-    maksJob=7
 
+# jumlahJob=len(result)
+
+def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
+ 
+    global k,gambar
+    maksJob=7
+    #print(karyawan_id)
     jumlahJob=len(result)
     
     wContainer=0.843 * b.sW
-    btnTask =[0 for x in range(88)]
+
+    for i in range(87):
+        b.btnTask[bariskaryawan][i].place_forget()
     gambar=[0 for y in range(60)]
     containerJob=[0 for y in range(kontainer)]
     itembaris=jumlahJob/kontainer
@@ -343,8 +355,7 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
 
     # print("mulai \r\n")
     for i in range(jumlahJob):
-        btnTask[i] = Button(b.frame,text="hallo "+str(i))            
-        btnTask[i].config(command=lambda:b.tertekan(result[i]))
+        b.btnTask[bariskaryawan][i].config(command=lambda:b.tertekan(result[i]))
         
         if(x>=(containerJob[icontainer]-1)):
             icontainer=icontainer+1
@@ -357,8 +368,9 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
         panjangButton=(wContainer-((0.01*b.sW)+((jumlahItem+1)*0.01*b.sW)))/containerJob[icontainer]
     
         offsetH=0.164*b.sH + (bariskaryawan*0.180*b.sH)
-        offsetW=0.163*b.sW            
-        btnTask[i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=((int(icontainer)*0.180*b.sH)+offsetH),width=panjangButton,height=0.158*b.sH) 
+        offsetW=0.163*b.sW      
+              
+        b.btnTask[bariskaryawan][i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=((int(icontainer)*0.180*b.sH)+offsetH),width=panjangButton,height=0.158*b.sH) 
         #print("i="+str(i) +",x="+str(x)+",sigma="+str(sigmaContainerTerlewat) +",icontainer= " + str(icontainer))
         x=i
         # try:
@@ -377,16 +389,14 @@ def appendCad(bariskaryawan,result,kontainer=1,delete=0):
             background="GREEN"
         else:
             background="#11698E"
-        btnTask[i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan:b.tertekan(result[x],id,nomor),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
-    if delete==1:
-        #print("terdelete ges yak")
-        for l in range(jumlahJob):
-            btnTask[l].destroy()
+        print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
+        print(b.btnTask[bariskaryawan][i])
+        b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
+    
 
 def listKaryawan():
     global arrayKaryawan
-    # tryButton = Button(b.frame,text= "mbak bi",command = increment)
-    # tryButton.place(x=200,y=50,width=50,height=50)
+
     
     
 
@@ -401,17 +411,24 @@ def listKaryawan():
         labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
     
 
-def karyawanReq():
-    for karyawan in range(len(arrayKaryawan)):
+def karyawanReq(karyawan):
+    
        # print(karyawan)
         url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
-       # print(len(result))
-        #print(result)
-        appendCad(karyawan,result,1)
-karyawanReq()
+        print(result)
+        karyawan_id = arrayKaryawan[karyawan]['id']
+        appendCad(karyawan,result,karyawan_id)
+def refresh():
+    
+    for i in range(len(arrayKaryawan)):
+        karyawanReq(i)
+tryButton = Button(b.frame,text= "mbak bi",command = refresh)
+tryButton.place(x=200,y=50,width=50,height=50)
 
+
+refresh()
 
     
 listKaryawan()
