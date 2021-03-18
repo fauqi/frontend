@@ -131,6 +131,7 @@ class Beranda:
         self.startPhoto2=ImageTk.PhotoImage(self.photo10)
         self.photo3=Image.open("start.png")
         self.photo3=self.photo3.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
+
         self.startPhoto=ImageTk.PhotoImage(self.photo3)
         self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=lambda:self.startPressed(nomor))
         self.startButton.place(x=0.08*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
@@ -289,7 +290,7 @@ class Beranda:
         else :
             response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
             #print(response)
-            print(id_karyawan)
+            # print(id_karyawan)
             if response==True:
                 self.frame2.destroy()
                 tertekanFlag=0
@@ -397,8 +398,8 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
             background="GREEN"
         else:
             background="#11698E"
-        print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
-        print(b.btnTask[bariskaryawan][i])
+        # print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
+        # print(b.btnTask[bariskaryawan][i])
         b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
     
 
@@ -425,7 +426,7 @@ def karyawanReq(karyawan):
         url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
         result=result.json()
-        print(result)
+        # print(result)
         karyawan_id = arrayKaryawan[karyawan]['id']
         appendCad(karyawan,result['data'],karyawan_id)
 
@@ -443,7 +444,7 @@ def rutinCekFlag():
     lastUpdate=result['last_updated']
     LastUpdateLabel=Label(b.frame,text = "Last Update:\n "+str(lastUpdate),bg="WHITE")
     LastUpdateLabel.place(x=0.85*b.sW,y=0.024*b.sH) 
-    print(result)
+    # print(result)
     if result['flag'] == 1:
         refresh()
     b.frame.after(3000,rutinCekFlag)
