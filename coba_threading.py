@@ -18,5 +18,5 @@ def penyela():
 event = threading.Event()
 t1= threading.Thread(target=delay5)
 t2= threading.Thread(target=penyela)
-t1.start()
+
 t2.start()

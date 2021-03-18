@@ -1,6 +1,9 @@
 from cloud import *
 from cloud import result
 from tkinter import messagebox
+from coba_threading import *
+
+
 tertekanFlag=0
 k=0
 c=0
