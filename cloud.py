@@ -8,8 +8,8 @@ from PIL import ImageTk, Image
 import io
 from urllib import request, parse
 #query = dict(zip(( 'id','is_stock'), ("5530","0")))
-#server = "https://indowella.com/new/public"
-server = "http://192.168.100.104:8000"
+server = "https://indowella.com/new/public"
+# server = "http://192.168.100.104:8000"
 lontong=Tk()
 
 def httpPost(url, query):

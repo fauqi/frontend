@@ -97,8 +97,11 @@ class Beranda:
     def tertekan(self,hasil,identify,nomor,id_karyawan):
         global stock,tertekanFlag,server,url,query
         self.identify=identify
+        
         self.id_karyawan=id_karyawan
         self.frame.after(1,Loadloading)       
+        # self.frame.after(2000,unloading)       
+        # self.frame.after(2000,lambda: self.showPopup(hasil))       
         url = server+"/api/v1/get-project?id="+ str(self.identify)
         ngecloud.set()
         # self.url = server+"/api/v1/get-project?id="+ str(self.identify)
@@ -107,29 +110,22 @@ class Beranda:
         # print(self.dataReady)
         # dataReady=self.dataReady
         self.dataReady={'id': 6026, 'customer': 'Erny', 'deadline': 'Kamis, 04 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'D and J', 'stock': '[D and J] sablon 14 HOKKAKU OV', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': 'http://192.168.100.102:8000/desain/20210303024142-d&j 14oz oval hokaku.JPG', 'date_start': None}
+        self.hasil=hasil
+       
+            #print(self.dataReady['image'])
+    def initPopup(self):
         
-        #print(self.dataReady['image'])
-
-        
+    def showPopup(self):
+        global tertekanFlag
         if tertekanFlag==0:
             tertekanFlag=1
-            self.hasil=hasil
         # print(hasil['brand'])
             self.frame2=Frame(self.master)
-            
             self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
-
-
         #ngebuat labelnye
-    
-
-
             self.photo2=Image.open("popup.png")
             self.photo2 = self.photo2.resize((self.rW,self.rH), Image.ANTIALIAS)
             self.gambar3 = ImageTk.PhotoImage(self.photo2)
-            
-
-            
             
             self.label2 = Label(self.frame2,text="LONTONG",bg="WHITE",image=self.gambar3,borderwidth=4)
             self.label2.place(x=0,y=0,height=self.sH*0.79,width=self.sW*0.41,anchor=NW)
@@ -208,7 +204,9 @@ class Beranda:
         self.labelBrand.config(text=splitter(self.dataReady['brand'],15))
         self.labelStock.config(text=splitter(self.dataReady['stock'],15))
         self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
-        
+        # self.frame.after(10,self.loadPicture)
+        # 
+    def loadPicture(self):
         try:
             self.picturePopup=loadImageWebPublic(self.dataReady['image'],0,0.21*self.sH)
             self.photoLabel.config(image=self.picturePopup,bg="WHITE")
@@ -218,6 +216,8 @@ class Beranda:
             self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
             #print("no image bro")
             self.photoLabel.config(image=self.gambarLabel,bg="WHITE")
+            
+        
 
     def startPressed(self,nomor):
         global starFlag,tertekanFlag
@@ -463,22 +463,33 @@ refresh()
 rutinCekFlag()
     
 listKaryawan()
-labels=Label(b.frame,text="HIYA HIYA HIYA")
+labels=Label(lontong,text="HIYA HIYA HIYA")
 def Loadloading():
     
-    labels.place(x=500,y=500)
+    labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER)
 
+def unloading():
+    
+    labels.place_forget()
     
 
 
 def timer():
     global url
+    
     while True:
         time.sleep(0.1)
         if ngecloud.is_set():
             print("clicked")
-            requests.get(url)
+
+            data= requests.get(url)
+            b.dataReady  = data.json()
+            print(b.dataReady)
             ngecloud.clear()
+            b.frame.after(100,b.showPopup)
+            b.frame.after(100,unloading)
+
+
 t1= threading.Thread(target=timer)
 ngecloud=threading.Event()
 t1.start()
