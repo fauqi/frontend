@@ -1,4 +1,5 @@
 print("lontong")
+
 import requests
 import json
 import urllib3
@@ -8,7 +9,7 @@ import io
 from urllib import request, parse
 #query = dict(zip(( 'id','is_stock'), ("5530","0")))
 #server = "https://indowella.com/new/public"
-server = "http://192.168.100.102:8000"
+server = "http://192.168.100.104:8000"
 lontong=Tk()
 
 def httpPost(url, query):
@@ -29,6 +30,7 @@ def httpGet(url, data1):
     response = request.urlopen(req)
     response = response.read()
     hasil = response.decode("utf-8")
+    
     return(hasil)
 
 dataku1=requests.get(server+"/api/v1/get-karyawan?bidang=sablon")

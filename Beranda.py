@@ -1,8 +1,9 @@
 from cloud import *
 from cloud import result
 from tkinter import messagebox
-from coba_threading import *
-
+import threading
+import time
+import queue
 
 tertekanFlag=0
 k=0
@@ -13,6 +14,8 @@ starFlag=0
 stock=False
 operator=""
 lastUpdate=0
+url=""
+query=""
 #nyoba commit
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
@@ -92,13 +95,18 @@ class Beranda:
             query = dict(zip(( 'id','is_stock'), (self.identify,"1")))
         httpPost(url,query)
     def tertekan(self,hasil,identify,nomor,id_karyawan):
-        global stock,tertekanFlag,server
+        global stock,tertekanFlag,server,url,query
         self.identify=identify
         self.id_karyawan=id_karyawan
-        self.url = server+"/api/v1/get-project?id="+ str(identify)
-        self.data= requests.get(self.url)
-        self.dataReady  = self.data.json()
-        dataReady=self.dataReady
+        self.frame.after(1,Loadloading)       
+        url = server+"/api/v1/get-project?id="+ str(self.identify)
+        ngecloud.set()
+        # self.url = server+"/api/v1/get-project?id="+ str(self.identify)
+        # self.data= requests.get(self.url)
+        # self.dataReady  = self.data.json()
+        # print(self.dataReady)
+        # dataReady=self.dataReady
+        self.dataReady={'id': 6026, 'customer': 'Erny', 'deadline': 'Kamis, 04 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'D and J', 'stock': '[D and J] sablon 14 HOKKAKU OV', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': 'http://192.168.100.102:8000/desain/20210303024142-d&j 14oz oval hokaku.JPG', 'date_start': None}
         
         #print(self.dataReady['image'])
 
@@ -455,6 +463,29 @@ refresh()
 rutinCekFlag()
     
 listKaryawan()
+labels=Label(b.frame,text="HIYA HIYA HIYA")
+def Loadloading():
+    
+    labels.place(x=500,y=500)
+
+    
+
+
+def timer():
+    global url
+    while True:
+        time.sleep(0.1)
+        if ngecloud.is_set():
+            print("clicked")
+            requests.get(url)
+            ngecloud.clear()
+t1= threading.Thread(target=timer)
+ngecloud=threading.Event()
+t1.start()
+            
+
+
+
 
 lontong.mainloop()
       
