@@ -53,8 +53,9 @@ class Beranda:
 
         for i in range(5):
             for j in range(88):    
-                self.btnTask[i][j] = Button(self.frame,text="hallo")            
-                  
+                self.btnTask[i][j] = Button(self.frame,text="hallo")   
+        self.dataReady=""         
+        self.initPopup()        
         
     
     def showLayar(self):
@@ -114,14 +115,12 @@ class Beranda:
        
             #print(self.dataReady['image'])
     def initPopup(self):
-        
-    def showPopup(self):
         global tertekanFlag
         if tertekanFlag==0:
             tertekanFlag=1
         # print(hasil['brand'])
             self.frame2=Frame(self.master)
-            self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
+            # self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
         #ngebuat labelnye
             self.photo2=Image.open("popup.png")
             self.photo2 = self.photo2.resize((self.rW,self.rH), Image.ANTIALIAS)
@@ -142,10 +141,6 @@ class Beranda:
         self.startPhoto=ImageTk.PhotoImage(self.photo3)
         self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=lambda:self.startPressed(nomor))
         self.startButton.place(x=0.08*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
-        if self.dataReady['is_start']==True:
-            self.startButton.config(image=self.startPhoto2)
-        else:
-            self.startButton.config(image=self.startPhoto)
 
     #finishButton
         self.photo8=Image.open("finish.png")
@@ -175,10 +170,6 @@ class Beranda:
         self.switch_tidak_ada= ImageTk.PhotoImage(self.photo7)
         self.switch_btn = Button(self.frame2,bg="WHITE",image=self.switch_tidak_ada,borderwidth=0,command=lambda:self.switch(self.dataReady))
         self.switch_btn.place(x=0.19*self.sW,y=0.03*self.sH,width=0.06*self.sW,height=0.077*self.sH)
-        if self.dataReady['is_stock']==True:
-            self.switch_btn.config(image=self.switch_ada)
-        else:
-            self.switch_btn.config(image=self.switch_tidak_ada)
         
         self.labelDeadline=Label(self.frame2,bg="WHITE")
         self.labelCustomer=Label(self.frame2,bg="WHITE")
@@ -196,7 +187,20 @@ class Beranda:
         self.labelBrand.place(x=0.28*self.sW,y=0*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
-        
+        self.fotoLabel=Image.open("no image.png")
+        self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
+        self.noimage= ImageTk.PhotoImage(self.fotoLabel)
+    def showPopup(self):
+        self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
+        if self.dataReady['is_start']==True:
+            self.startButton.config(image=self.startPhoto2)
+        else:
+            self.startButton.config(image=self.startPhoto)
+        if self.dataReady['is_stock']==True:
+            self.switch_btn.config(image=self.switch_ada)
+        else:
+            self.switch_btn.config(image=self.switch_tidak_ada)
+       
         self.labelDeadline.config(text=splitter(self.dataReady['deadline'],15))
         self.labelCustomer.config(text=splitter(self.dataReady['customer'],15))
         self.labelQty.config(text=splitter(self.dataReady['qty'],15))
@@ -204,18 +208,19 @@ class Beranda:
         self.labelBrand.config(text=splitter(self.dataReady['brand'],15))
         self.labelStock.config(text=splitter(self.dataReady['stock'],15))
         self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
-        # self.frame.after(10,self.loadPicture)
+        self.photoLabel.config(image=self.noimage,bg="WHITE")
+        self.frame.after(100,self.loadPicture)
         # 
     def loadPicture(self):
         try:
             self.picturePopup=loadImageWebPublic(self.dataReady['image'],0,0.21*self.sH)
             self.photoLabel.config(image=self.picturePopup,bg="WHITE")
         except:
-            self.fotoLabel=Image.open("no image.png")
-            self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
-            self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
+            # self.fotoLabel=Image.open("no image.png")
+            # self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
+            # self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
             #print("no image bro")
-            self.photoLabel.config(image=self.gambarLabel,bg="WHITE")
+            self.photoLabel.config(image=self.noimage,bg="WHITE")
             
         
 
@@ -226,7 +231,7 @@ class Beranda:
 
         #print(self.dataReady['is_start'])
         if self.dataReady['is_start']==False:
-            self.frame2.destroy()
+            self.frame2.place_forget()()
             tertekanFlag=0
             query= dict(zip(( 'id',""), (self.identify,"")))
             httpPost(url, query)
@@ -236,7 +241,7 @@ class Beranda:
             url= "/api/v1/cancel-start-project"
             query= dict(zip(( 'id',""), (self.identify,"")))
             httpPost(url, query)
-            self.frame2.destroy()
+            self.frame2.place_forget()
             tertekanFlag=0
         
 
@@ -250,11 +255,11 @@ class Beranda:
         pass
     def closePressed(self):
         global tertekanFlag
-        self.frame2.destroy()
+        self.frame2.place_forget()()
         tertekanFlag=0
     def Exit(self,event):
         global tertekanFlag
-        self.frame2.destroy()
+        self.frame2.place_forget()()
         tertekanflag=0
     def pausePressed(self,id_karyawan):
         global z
@@ -296,14 +301,14 @@ class Beranda:
         global tertekanFlag,jumlahJob
         if self.dataReady['is_stock']== False:
             messagebox.showerror("warning","Silahkan mutasi dulu stocknya")
-            # self.frame2.destroy()
+            # self.frame2.place_forget()()
             # tertekanFlag=0
         else :
             response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
             #print(response)
             # print(id_karyawan)
             if response==True:
-                self.frame2.destroy()
+                self.frame2.place_forget()()
                 tertekanFlag=0
                 url = "/api/v1/production-stock"
                 
