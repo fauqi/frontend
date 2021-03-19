@@ -110,7 +110,7 @@ class Beranda:
         # self.dataReady  = self.data.json()
         # print(self.dataReady)
         # dataReady=self.dataReady
-        self.dataReady={'id': 6026, 'customer': 'Erny', 'deadline': 'Kamis, 04 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'D and J', 'stock': '[D and J] sablon 14 HOKKAKU OV', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': 'http://192.168.100.102:8000/desain/20210303024142-d&j 14oz oval hokaku.JPG', 'date_start': None}
+        #self.dataReady={'id': 6026, 'customer': 'Erny', 'deadline': 'Kamis, 04 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'D and J', 'stock': '[D and J] sablon 14 HOKKAKU OV', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': 'http://192.168.100.102:8000/desain/20210303024142-d&j 14oz oval hokaku.JPG', 'date_start': None}
         self.hasil=hasil
        
             #print(self.dataReady['image'])
@@ -146,7 +146,7 @@ class Beranda:
         self.photo8=Image.open("finish.png")
         self.photo8=self.photo8.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
         self.finishPhoto=ImageTk.PhotoImage(self.photo8)
-        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(nomor,id_karyawan))
+        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(nomor,self.id_karyawan))
         self.finishButton.place(x=0.2*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
     #closeButton
         self.photo9=Image.open("close.png")
@@ -158,7 +158,7 @@ class Beranda:
         self.photo4=Image.open("pause.png")
         self.photo4=self.photo4.resize((int(0.045*self.sW),int(0.063*self.sH)),Image.ANTIALIAS)
         self.pausePhoto=ImageTk.PhotoImage(self.photo4)
-        self.pauseButton=Button(self.frame2,image = self.pausePhoto,borderwidth=0,bg="WHITE",command=lambda:self.pausePressed(id_karyawan))
+        self.pauseButton=Button(self.frame2,image = self.pausePhoto,borderwidth=0,bg="WHITE",command=lambda:self.pausePressed(self.id_karyawan))
         self.pauseButton.place(x=0.644*(self.sW*0.41),y=(self.sH*0.82)*0.08,width=0.045*self.sW,height=0.063*self.sH,anchor=W)
 
             #switch widget
@@ -187,7 +187,7 @@ class Beranda:
         self.labelBrand.place(x=0.28*self.sW,y=0*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
-        self.fotoLabel=Image.open("no image.png")
+        self.fotoLabel=Image.open("loading.png")
         self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
         self.noimage= ImageTk.PhotoImage(self.fotoLabel)
     def showPopup(self):
@@ -231,7 +231,8 @@ class Beranda:
 
         #print(self.dataReady['is_start'])
         if self.dataReady['is_start']==False:
-            self.frame2.place_forget()()
+            self.frame2.place_forget()
+            
             tertekanFlag=0
             query= dict(zip(( 'id',""), (self.identify,"")))
             httpPost(url, query)
@@ -244,7 +245,7 @@ class Beranda:
             self.frame2.place_forget()
             tertekanFlag=0
         
-
+        self.frame3.destroy()
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
         result=result.json()
         #print (arrayKaryawan[nomor]['id'])
@@ -253,13 +254,10 @@ class Beranda:
         
     def cancel(self):
         pass
-    def closePressed(self):
-        global tertekanFlag
-        self.frame2.place_forget()()
-        tertekanFlag=0
+
     def Exit(self,event):
         global tertekanFlag
-        self.frame2.place_forget()()
+        self.frame2.place_forget()
         tertekanflag=0
     def pausePressed(self,id_karyawan):
         global z
@@ -276,7 +274,7 @@ class Beranda:
         self.btnKal0 = Button(self.frame3,text="0",bg="#E7EBF0",fg='#1687A7',font=25,command=lambda:self.input(0))
         self.btnKal0.place(x=0.21*self.sW, y=0.352*self.sH, width=0.055*self.sW, height=0.078*self.sH,anchor= NW)
 
-        self.btnKalEnter = Button(self.frame3,text="\n".join("ENTER"),bg="#E7EBF0",fg='#1687A7',font=25,command = lambda:self.enter(id_karyawan))
+        self.btnKalEnter = Button(self.frame3,text="\n".join("ENTER"),bg="#E7EBF0",fg='#1687A7',font=25,command = lambda:self.enter(self.id_karyawan))
         self.btnKalEnter.place(x=0.21*self.sW, y=0.165*self.sH, width=0.055*self.sW, height=0.172*self.sH,anchor= NW)
 
         self.btnKalDel = Button(self.frame3,text="DEL",bg="#E7EBF0",fg='#1687A7',font=25,command=self.Delpressed)
@@ -296,7 +294,11 @@ class Beranda:
         self.kalLab=Label(self.frame3,bg="WHITE",text="",fg='#1687A7',font='Helvetica 50 bold')
         self.kalLab.place(x=0.0097*self.sW,y=0.0117*self.sH,width=0.19*self.sW,height=0.134*self.sH)
         z=0
-        
+    def closePressed(self):
+        global tertekanFlag
+        self.frame2.place_forget()
+        self.frame3.destroy()
+        tertekanFlag=0
     def finishPressed(self,nomor,id_karyawan):
         global tertekanFlag,jumlahJob
         if self.dataReady['is_stock']== False:
@@ -312,7 +314,7 @@ class Beranda:
                 tertekanFlag=0
                 url = "/api/v1/production-stock"
                 
-                query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],id_karyawan)))
+                query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],self.id_karyawan)))
                 result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
                 httpPost(url,query)
                 result=result.json()
@@ -322,7 +324,7 @@ class Beranda:
         global operator
         self.qty=operator
         url = "/api/v1/production-stock"
-        query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,id_karyawan)))
+        query = dict(zip(( 'id','qty','karyawan_id'), (self.identify,self.qty,self.id_karyawan)))
         httpPost(url,query)
 
         response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah mengerjakan "+self.qty+" pcs?")
@@ -468,10 +470,10 @@ refresh()
 rutinCekFlag()
     
 listKaryawan()
-labels=Label(lontong,text="HIYA HIYA HIYA")
+labels=Label(lontong,text="LOADING...",font='Helvetica 20 bold')
 def Loadloading():
     
-    labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER)
+    labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER,width=300,height=100)
 
 def unloading():
     
