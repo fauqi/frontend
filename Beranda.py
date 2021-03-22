@@ -20,11 +20,32 @@ query=""
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
+lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
 #print(arrayKaryawan[2]['nama'])
 
 #print(url)
+class FullScreenApp(object):
+    def __init__(self, master, **kwargs):
+        self.master=master
+        self.flag=0
+        pad=0
+        self._geom='200x200+0+0'
+        master.geometry("{0}x{1}+0+0".format(
+            master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        master.bind('<Triple-1>',self.escape)      
+    def escape(self,event):
+        if self.flag==0:
+            self.master.overrideredirect(False)
+            self.flag=1
+        else:
+            self.master.overrideredirect(True)
+            self.flag=0
+        
+      
+app = FullScreenApp(lontong)
+
 def splitter(s,maksChar):
     total =0
     result=""
@@ -302,7 +323,7 @@ class Beranda:
     def finishPressed(self,nomor,id_karyawan):
         global tertekanFlag,jumlahJob
         if self.dataReady['is_stock']== False:
-            messagebox.showerror("warning","Silahkan mutasi dulu stocknya")
+            messagebox.showerror("warning","Silahkan mutasi dulu stocknya!!")
             # self.frame2.place_forget()()
             # tertekanFlag=0
         else :
@@ -423,10 +444,6 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
 
 def listKaryawan():
     global arrayKaryawan
-
-    
-    
-
     labelPegawai=[0 for z in range(len(arrayKaryawan))]
     labelUser=[0 for y in range(len(arrayKaryawan))]
    # print(len(arrayKaryawan))
