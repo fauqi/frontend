@@ -20,6 +20,7 @@ query=""
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
+
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
@@ -36,11 +37,14 @@ class FullScreenApp(object):
             master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
         master.bind('<Triple-1>',self.escape)      
     def escape(self,event):
+        global SCREENHEIGHT,SCREENWIDTH
         if self.flag==0:
             self.master.overrideredirect(False)
+            self.master.geometry("{0}x{1}+0+100".format(int(SCREENWIDTH*0.8), int(SCREENHEIGHT*0.8)))
             self.flag=1
         else:
             self.master.overrideredirect(True)
+            self.master.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
             self.flag=0
         
       
