@@ -130,6 +130,7 @@ class Beranda:
         # self.frame.after(2000,lambda: self.showPopup(hasil))       
         url = server+"/api/v1/get-project?id="+ str(self.identify)
         ngecloud.set()
+        
         # self.url = server+"/api/v1/get-project?id="+ str(self.identify)
         # self.data= requests.get(self.url)
         # self.dataReady  = self.data.json()
@@ -145,6 +146,7 @@ class Beranda:
             tertekanFlag=1
         # print(hasil['brand'])
             self.frame2=Frame(self.master)
+            
             # self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
         #ngebuat labelnye
             self.photo2=Image.open("popup.png")
@@ -217,6 +219,7 @@ class Beranda:
         self.noimage= ImageTk.PhotoImage(self.fotoLabel)
     def showPopup(self):
         self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
+        self.frame3=Frame(self.frame2,bg='#1687A7')
         if self.dataReady['is_start']==True:
             self.startButton.config(image=self.startPhoto2)
         else:
@@ -287,7 +290,6 @@ class Beranda:
     def pausePressed(self,id_karyawan):
         global z
     #kalkulator
-        self.frame3=Frame(self.frame2,bg='#1687A7')
         self.frame3.place(x=(0.41*self.sW)*0.5,y=(self.sH*0.79)*0.5,anchor=CENTER,width=self.sW*0.28,height=0.46*self.sH)
         self.btnKal = [[0 for x in range(4)] for x in range(4)]
         for j in range(3):
@@ -320,10 +322,8 @@ class Beranda:
         self.kalLab.place(x=0.0097*self.sW,y=0.0117*self.sH,width=0.19*self.sW,height=0.134*self.sH)
         z=0
     def closePressed(self):
-        global tertekanFlag
-        self.frame2.place_forget()
-        self.frame3.destroy()
-        tertekanFlag=0
+
+        threadClosePressed.set()
     def finishPressed(self,nomor,id_karyawan):
         global tertekanFlag,jumlahJob
         if self.dataReady['is_stock']== False:
@@ -516,10 +516,20 @@ def timer():
             ngecloud.clear()
             b.frame.after(100,b.showPopup)
             b.frame.after(100,unloading)
+        if threadClosePressed.is_set():
+            print("close pressed")
+            global tertekanFlag
+            b.frame2.place_forget()
+            b.frame3.destroy()
+            tertekanFlag=0
+            threadClosePressed.clear()
+
+        
 
 
 t1= threading.Thread(target=timer)
 ngecloud=threading.Event()
+threadClosePressed=threading.Event()
 t1.start()
             
 
