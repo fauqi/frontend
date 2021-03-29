@@ -20,7 +20,7 @@ query=""
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
-
+lontong.iconbitmap('logo.ico')
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
@@ -68,8 +68,7 @@ def splitter(s,maksChar):
 class Beranda:
     def __init__(self,master):
         self.master=master
-        self.master.title("apanihman")
-        self.pegawai=["Imam","Aji","Roni","MBAK bi"]
+        self.master.title("CV. INDOWELLA BERKAH JAYA")
         self.sW=SCREENWIDTH
         self.sH=SCREENHEIGHT
         self.frame=Frame(self.master,bg="#f9f9f9")
@@ -123,7 +122,7 @@ class Beranda:
     def tertekan(self,hasil,identify,nomor,id_karyawan):
         global stock,tertekanFlag,server,url,query
         self.identify=identify
-        
+        self.nomor=nomor
         self.id_karyawan=id_karyawan
         self.frame.after(1,Loadloading)       
         # self.frame.after(2000,unloading)       
@@ -166,7 +165,7 @@ class Beranda:
         self.photo3=self.photo3.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
 
         self.startPhoto=ImageTk.PhotoImage(self.photo3)
-        self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=lambda:self.startPressed(nomor))
+        self.startButton=Button(self.frame2,image = self.startPhoto,borderwidth=0,bg="WHITE",command=lambda:self.startPressed(self.nomor))
         self.startButton.place(x=0.08*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
 
     #finishButton
