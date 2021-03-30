@@ -24,7 +24,7 @@ lontong.iconbitmap('logo.ico')
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
-def loadAllImage():
+
 
 #print(arrayKaryawan[2]['nama'])
 
@@ -35,8 +35,7 @@ class FullScreenApp(object):
         self.flag=0
         pad=0
         self._geom='200x200+0+0'
-        master.geometry("{0}x{1}+0+0".format(
-            master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        master.geometry("{0}x{1}+0+0".format(master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
         master.bind('<Triple-1>',self.escape)      
     def escape(self,event):
         global SCREENHEIGHT,SCREENWIDTH
@@ -76,7 +75,10 @@ class Beranda:
         self.frame=Frame(self.master,bg="#f9f9f9")
         self.showLayar()
         self.btnTask =[[0 for x in range(88)]  for x in range(5)]
-
+        self.fullImage =[[0 for x in range(88)]  for x in range(5)]
+        self.noImageLabel=Image.open("no image.png")
+        self.noImageLabel=self.noImageLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
+        self.noImageLabel= ImageTk.PhotoImage(self.noImageLabel)
         for i in range(5):
             for j in range(88):    
                 self.btnTask[i][j] = Button(self.frame,text="hallo")   
@@ -121,8 +123,9 @@ class Beranda:
             self.switch_btn.config(image=self.switch_ada)
             query = dict(zip(( 'id','is_stock'), (self.identify,"1")))
         httpPost(url,query)
-    def tertekan(self,hasil,identify,nomor,id_karyawan):
+    def tertekan(self,hasil,identify,nomor,id_karyawan,kolom):
         global stock,tertekanFlag,server,url,query
+        self.kolom=kolom
         self.identify=identify
         self.nomor=nomor
         self.id_karyawan=id_karyawan
@@ -215,9 +218,9 @@ class Beranda:
         self.labelBrand.place(x=0.28*self.sW,y=0*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         self.labelStock.place(x=0.28*self.sW,y=1*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.105*self.sW,height=0.07*self.sH)
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
-        self.fotoLabel=Image.open("loading.png")
-        self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
-        self.noimage= ImageTk.PhotoImage(self.fotoLabel)
+        self.loadingLabel=Image.open("loading.png")
+        self.loadingLabel=self.loadingLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
+        self.loadingImagee= ImageTk.PhotoImage(self.loadingLabel)
     def showPopup(self):
         self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
         self.frame3=Frame(self.frame2,bg='#1687A7')
@@ -237,8 +240,9 @@ class Beranda:
         self.labelBrand.config(text=splitter(self.dataReady['brand'],15))
         self.labelStock.config(text=splitter(self.dataReady['stock'],15))
         self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
-        self.photoLabel.config(image=self.noimage,bg="WHITE")
-        self.frame.after(100,self.loadPicture)
+        self.photoLabel.config(image=self.fullImage[self.nomor][self.kolom],bg="WHITE")
+        print(str(self.nomor)+":"+str(self.kolom))
+        # self.frame.after(100,self.loadPicture)
         # 
     def loadPicture(self):
         try:
@@ -253,7 +257,7 @@ class Beranda:
             
         
 
-    def startPressed(self,nomor):
+    def startPressed(self,nomor,kolom):
         global starFlag,tertekanFlag
         url="/api/v1/start-project"
         self.a = self.dataReady['is_start']
@@ -378,15 +382,26 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
     global k,gambar
     maksJob=7
     #print(karyawan_id)
-    
+
     jumlahJob=len(result)
     
     wContainer=0.843 * b.sW
 
-    for i in range(87):
+    for i in range(60):
         b.btnTask[bariskaryawan][i].place_forget()
+
+    for o in range(jumlahJob):
+        try:
+            
+            image=loadImageWebPublic(result[o]['image'],0,0.21*b.sH)
+            b.fullImage[bariskaryawan][o] =image
+            print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
+        except:
+            b.fullImage[bariskaryawan][o]=b.noImageLabel
+            pass
     gambar=[0 for y in range(60)]
     containerJob=[0 for y in range(kontainer)]
+   
     itembaris=jumlahJob/kontainer
     if itembaris<maksJob:
         k=7
@@ -422,9 +437,10 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         panjangButton=(wContainer-((0.01*b.sW)+((jumlahItem+1)*0.01*b.sW)))/containerJob[icontainer]
     
         offsetH=0.164*b.sH + (bariskaryawan*0.180*b.sH)
-        offsetW=0.163*b.sW      
-              
+        offsetW=0.163*b.sW
+  
         b.btnTask[bariskaryawan][i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=((int(icontainer)*0.180*b.sH)+offsetH),width=panjangButton,height=0.158*b.sH) 
+
         #print("i="+str(i) +",x="+str(x)+",sigma="+str(sigmaContainerTerlewat) +",icontainer= " + str(icontainer))
         x=i
         # try:
@@ -445,7 +461,7 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
             background="#11698E"
         # print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
         # print(b.btnTask[bariskaryawan][i])
-        b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
+        b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id,x),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
     
 
 def listKaryawan():
