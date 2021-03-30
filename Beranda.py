@@ -180,7 +180,7 @@ class Beranda:
         self.photo8=Image.open("finish.png")
         self.photo8=self.photo8.resize((int(0.1*self.sW),int(0.057*self.sH)),Image.ANTIALIAS)
         self.finishPhoto=ImageTk.PhotoImage(self.photo8)
-        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(nomor,self.id_karyawan))
+        self.finishButton=Button(self.frame2,image = self.finishPhoto,borderwidth=0,bg="WHITE",command=lambda:self.finishPressed(self.nomor,self.id_karyawan))
         self.finishButton.place(x=0.2*self.sW,y=self.sH*0.68,width=0.12*self.sW,height=0.08*self.sH,anchor=NW)
     #closeButton
         self.photo9=Image.open("close.png")
@@ -322,7 +322,7 @@ class Beranda:
             #print(response)
             # print(id_karyawan)
             if response==True:
-                self.frame2.place_forget()()
+                self.frame2.place_forget()
                 tertekanFlag=0
                 url = "/api/v1/production-stock"
                 
