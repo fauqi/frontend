@@ -5,6 +5,7 @@ import threading
 import time
 import queue
 
+flagInit=0
 tertekanFlag=0
 k=0
 c=0
@@ -24,6 +25,8 @@ lontong.iconbitmap('logo.ico')
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
+geturl=""
+posturl=""
 
 
 #print(arrayKaryawan[2]['nama'])
@@ -258,10 +261,10 @@ class Beranda:
         
 
     def startPressed(self,nomor):
-        global starFlag,tertekanFlag
+        global starFlag,tertekanFlag,geturl,posturl,flagInit
         url="/api/v1/start-project"
         self.a = self.dataReady['is_start']
-
+        threadStartPressed.set()
         #print(self.dataReady['is_start'])
         if self.dataReady['is_start']==False:
             self.frame2.place_forget()
@@ -282,6 +285,7 @@ class Beranda:
         result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
         result=result.json()
         #print (arrayKaryawan[nomor]['id'])
+        flagInit=1
         appendCad(nomor,result['data'],1)
 
         
@@ -379,7 +383,7 @@ b=Beranda(lontong)
 
 def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
  
-    global k,gambar
+    global k,gambar,flagInit
     maksJob=7
     #print(karyawan_id)
 
@@ -390,15 +394,19 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
     for i in range(60):
         b.btnTask[bariskaryawan][i].place_forget()
 
-    for o in range(jumlahJob):
-        try:
-            
-            image=loadImageWebPublic(result[o]['image'],0,0.21*b.sH)
-            b.fullImage[bariskaryawan][o] =image
-            #print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
-        except:
-            b.fullImage[bariskaryawan][o]=b.noImageLabel
-            
+    if flagInit==0:
+        for o in range(jumlahJob):
+            try:
+                
+                image=loadImageWebPublic(result[o]['image'],0,0.21*b.sH)
+                b.fullImage[bariskaryawan][o] =image
+                #print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
+            except:
+                b.fullImage[bariskaryawan][o]=b.noImageLabel
+    flagInit=0
+        
+                
+                
     gambar=[0 for y in range(60)]
     containerJob=[0 for y in range(kontainer)]
    
@@ -478,19 +486,20 @@ def listKaryawan():
     
 
 def karyawanReq(karyawan):
-       # print(karyawan)
-        global lastUpdate
-        url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
-        result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
-        result=result.json()
-        # print(result)
-        karyawan_id = arrayKaryawan[karyawan]['id']
-        appendCad(karyawan,result['data'],karyawan_id)
+    # print(karyawan)
+    global lastUpdate
+    url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
+    result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
+    result=result.json()
+    # print(result)
+    karyawan_id = arrayKaryawan[karyawan]['id']
+    appendCad(karyawan,result['data'],karyawan_id)
 
 def refresh():
     
     for i in range(len(arrayKaryawan)):
         karyawanReq(i)
+ 
 # tryButton = Button(b.frame,text= "mbak bi",command = refresh)
 # tryButton.place(x=200,y=50,width=50,height=50)
 
@@ -503,9 +512,11 @@ def rutinCekFlag():
     LastUpdateLabel.place(x=0.85*b.sW,y=0.024*b.sH) 
     # print(result)
     if result['flag'] == 1:
+        print("ada yang baru nih")
         refresh()
     b.frame.after(3000,rutinCekFlag)
-refresh()
+    
+#refresh()
 rutinCekFlag()
     
 listKaryawan()
@@ -530,7 +541,7 @@ def timer():
 
             data= requests.get(url)
             b.dataReady  = data.json()
-            print(b.dataReady)
+            #print(b.dataReady)
             ngecloud.clear()
             b.frame.after(100,b.showPopup)
             b.frame.after(100,unloading)
@@ -541,6 +552,9 @@ def timer():
             b.frame3.destroy()
             tertekanFlag=0
             threadClosePressed.clear()
+        if threadStartPressed.is_set():
+            pass
+            
 
         
 
@@ -548,6 +562,7 @@ def timer():
 t1= threading.Thread(target=timer)
 ngecloud=threading.Event()
 threadClosePressed=threading.Event()
+threadStartPressed=threading.Event()
 t1.start()
             
 
