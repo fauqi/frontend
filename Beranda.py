@@ -261,32 +261,10 @@ class Beranda:
         
 
     def startPressed(self,nomor):
-        global starFlag,tertekanFlag,geturl,posturl,flagInit
-        url="/api/v1/start-project"
-        self.a = self.dataReady['is_start']
+        self.nomor=nomor
+        self.frame.after(1,Loadloading) 
         threadStartPressed.set()
-        #print(self.dataReady['is_start'])
-        if self.dataReady['is_start']==False:
-            self.frame2.place_forget()
-            
-            tertekanFlag=0
-            query= dict(zip(( 'id',""), (self.identify,"")))
-            httpPost(url, query)
-
-        elif self.dataReady['is_start']==True:
-            #print("cancel tertekan")
-            url= "/api/v1/cancel-start-project"
-            query= dict(zip(( 'id',""), (self.identify,"")))
-            httpPost(url, query)
-            self.frame2.place_forget()
-            tertekanFlag=0
         
-        self.frame3.destroy()
-        result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
-        result=result.json()
-        #print (arrayKaryawan[nomor]['id'])
-        flagInit=1
-        appendCad(nomor,result['data'],1)
 
         
     def cancel(self):
@@ -522,17 +500,13 @@ rutinCekFlag()
 listKaryawan()
 labels=Label(lontong,text="LOADING...",font='Helvetica 20 bold')
 def Loadloading():
-    
     labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER,width=300,height=100)
 
 def unloading():
-    
     labels.place_forget()
-    
-
 
 def timer():
-    global url
+    global url,starFlag,tertekanFlag,geturl,posturl,flagInit
     
     while True:
         time.sleep(0.1)
@@ -553,10 +527,33 @@ def timer():
             tertekanFlag=0
             threadClosePressed.clear()
         if threadStartPressed.is_set():
-            pass
-            
+            url="/api/v1/start-project"
+            b.a = b.dataReady['is_start']
+            #print(self.dataReady['is_start'])
+            if b.dataReady['is_start']==False:
+                b.frame2.place_forget()
+                tertekanFlag=0
+                query= dict(zip(( 'id',""), (b.identify,"")))
+                httpPost(url, query)
 
+            elif b.dataReady['is_start']==True:
+                #print("cancel tertekan")
+                url= "/api/v1/cancel-start-project"
+                query= dict(zip(( 'id',""), (b.identify,"")))
+                httpPost(url, query)
+                b.frame2.place_forget()
+                tertekanFlag=0
         
+            
+            result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[b.nomor]['id']))
+            result=result.json()
+            #print (arrayKaryawan[nomor]['id'])
+            flagInit=1
+            threadStartPressed.clear()
+            appendCad(b.nomor,result['data'],1)
+            b.frame.after(1,unloading)
+            b.frame3.destroy()
+            
 
 
 t1= threading.Thread(target=timer)
