@@ -563,9 +563,6 @@ threadStartPressed=threading.Event()
 t1.start()
             
 
-
-
-
 lontong.mainloop()
       
 
