@@ -241,7 +241,7 @@ class Beranda:
         self.labelStock.config(text=splitter(self.dataReady['stock'],15))
         self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
         self.photoLabel.config(image=self.fullImage[self.nomor][self.kolom],bg="WHITE")
-        print(str(self.nomor)+":"+str(self.kolom))
+        #print(str(self.nomor)+":"+str(self.kolom))
         # self.frame.after(100,self.loadPicture)
         # 
     def loadPicture(self):
@@ -257,7 +257,7 @@ class Beranda:
             
         
 
-    def startPressed(self,nomor,kolom):
+    def startPressed(self,nomor):
         global starFlag,tertekanFlag
         url="/api/v1/start-project"
         self.a = self.dataReady['is_start']
@@ -395,10 +395,10 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
             
             image=loadImageWebPublic(result[o]['image'],0,0.21*b.sH)
             b.fullImage[bariskaryawan][o] =image
-            print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
+            #print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
         except:
             b.fullImage[bariskaryawan][o]=b.noImageLabel
-            pass
+            
     gambar=[0 for y in range(60)]
     containerJob=[0 for y in range(kontainer)]
    
