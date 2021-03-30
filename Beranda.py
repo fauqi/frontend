@@ -24,6 +24,8 @@ lontong.iconbitmap('logo.ico')
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
+def loadAllImage():
+
 #print(arrayKaryawan[2]['nama'])
 
 #print(url)
@@ -376,6 +378,7 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
     global k,gambar
     maksJob=7
     #print(karyawan_id)
+    
     jumlahJob=len(result)
     
     wContainer=0.843 * b.sW
