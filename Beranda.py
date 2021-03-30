@@ -312,26 +312,10 @@ class Beranda:
 
         threadClosePressed.set()
     def finishPressed(self,nomor,id_karyawan):
-        global tertekanFlag,jumlahJob
-        if self.dataReady['is_stock']== False:
-            messagebox.showerror("warning","Silahkan mutasi dulu stocknya!!")
-            # self.frame2.place_forget()()
-            # tertekanFlag=0
-        else :
-            response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
-            #print(response)
-            # print(id_karyawan)
-            if response==True:
-                self.frame2.place_forget()
-                tertekanFlag=0
-                url = "/api/v1/production-stock"
-                
-                query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (self.identify,True,self.dataReady['qty'],self.id_karyawan)))
-                result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[nomor]['id']))
-                httpPost(url,query)
-                result=result.json()
-                # appendCad(nomor,result,1)
-                karyawanReq(nomor)
+        self.frame.after(1,Loadloading)
+        threadFinsihPressed.set()
+
+    
     def enter(self,id_karyawan):
         global operator
         self.qty=operator
@@ -358,7 +342,12 @@ class Beranda:
 b=Beranda(lontong)
 
 # jumlahJob=len(result)
+labels=Label(lontong,text="LOADING...",font='Helvetica 20 bold')
+def Loadloading():
+    labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER,width=300,height=100)
 
+def unloading():
+    labels.place_forget()
 def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
  
     global k,gambar,flagInit
@@ -371,6 +360,7 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
 
     for i in range(60):
         b.btnTask[bariskaryawan][i].place_forget()
+    
 
     if flagInit==0:
         for o in range(jumlahJob):
@@ -448,7 +438,8 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         # print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
         # print(b.btnTask[bariskaryawan][i])
         b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id,x),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
-    
+    b.frame.after(1000,unloading)
+            
 
 def listKaryawan():
     global arrayKaryawan
@@ -498,18 +489,41 @@ def rutinCekFlag():
 rutinCekFlag()
     
 listKaryawan()
-labels=Label(lontong,text="LOADING...",font='Helvetica 20 bold')
-def Loadloading():
-    labels.place(x=b.sW/2,y=b.sH/2,anchor=CENTER,width=300,height=100)
 
-def unloading():
-    labels.place_forget()
 
 def timer():
-    global url,starFlag,tertekanFlag,geturl,posturl,flagInit
+    global url,starFlag,tertekanFlag,geturl,posturl,flagInit,jumlahJob  
     
     while True:
         time.sleep(0.1)
+        if threadFinsihPressed.is_set():
+            threadFinsihPressed.clear()
+            if b.dataReady['is_stock']== False:
+                messagebox.showerror("warning","Silahkan mutasi dulu stocknya!!")
+                b.frame.after(10,unloading)
+                # self.frame2.place_forget()()
+                # tertekanFlag=0
+            else :
+                response=messagebox.askokcancel("messageBox","Apakah Anda yakin sudah menyelesaikan tugas?")
+                #print(response)
+                # print(id_karyawan)
+                if response==True:
+                    b.frame2.place_forget()
+                    tertekanFlag=0
+                    url = "/api/v1/production-stock"
+                    
+                    query = dict(zip(( 'id','is_finish','qty','karyawan_id'), (b.identify,True,b.dataReady['qty'],b.id_karyawan)))
+                    result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[b.nomor]['id']))
+                    httpPost(url,query)
+                    result=result.json()
+            
+                    appendCad(b.nomor,result['data'],1)
+                    
+                else :
+                    b.frame.after(10,unloading)
+                    
+
+
         if ngecloud.is_set():
             print("clicked")
 
@@ -521,7 +535,7 @@ def timer():
             b.frame.after(100,unloading)
         if threadClosePressed.is_set():
             print("close pressed")
-            global tertekanFlag
+          
             b.frame2.place_forget()
             b.frame3.destroy()
             tertekanFlag=0
@@ -560,6 +574,7 @@ t1= threading.Thread(target=timer)
 ngecloud=threading.Event()
 threadClosePressed=threading.Event()
 threadStartPressed=threading.Event()
+threadFinsihPressed=threading.Event()
 t1.start()
             
 
