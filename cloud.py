@@ -10,7 +10,7 @@ from urllib import request, parse
 #query = d
 # ict(zip(( 'id','is_stock'), ("5530","0")))
 #server = "https://indowella.com/new/public"
-server = "http://192.168.100.147:8000"
+server = "http://127.0.0.1:8000"
 lontong=Tk()
 
 def httpPost(url, query):

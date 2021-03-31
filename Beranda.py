@@ -4,7 +4,7 @@ from tkinter import messagebox
 import threading
 import time
 import queue
-
+import os
 flagInit=0
 tertekanFlag=0
 k=0
@@ -17,6 +17,16 @@ operator=""
 lastUpdate=0
 url=""
 query=""
+
+
+
+
+
+
+
+
+
+
 #nyoba commit
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
@@ -132,7 +142,7 @@ class Beranda:
         self.identify=identify
         self.nomor=nomor
         self.id_karyawan=id_karyawan
-        self.frame.after(1,Loadloading)       
+        self.frame.after(1,loadGif)       
         # self.frame.after(2000,unloading)       
         # self.frame.after(2000,lambda: self.showPopup(hasil))       
         url = server+"/api/v1/get-project?id="+ str(self.identify)
@@ -149,10 +159,12 @@ class Beranda:
             #print(self.dataReady['image'])
     def initPopup(self):
         global tertekanFlag
+        self.Giflabel = Label(self.frame)
         if tertekanFlag==0:
             tertekanFlag=1
         # print(hasil['brand'])
             self.frame2=Frame(self.master)
+            
             
             # self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
         #ngebuat labelnye
@@ -262,7 +274,7 @@ class Beranda:
 
     def startPressed(self,nomor):
         self.nomor=nomor
-        self.frame.after(1,Loadloading) 
+        self.frame.after(1,loadGif) 
         threadStartPressed.set()
         
 
@@ -312,7 +324,7 @@ class Beranda:
 
         threadClosePressed.set()
     def finishPressed(self,nomor,id_karyawan):
-        self.frame.after(1,Loadloading)
+        self.frame.after(1,loadGif)
         threadFinsihPressed.set()
 
     
@@ -348,6 +360,7 @@ def Loadloading():
 
 def unloading():
     labels.place_forget()
+    b.Giflabel.place_forget()
 def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
  
     global k,gambar,flagInit
@@ -569,7 +582,21 @@ def timer():
             appendCad(b.nomor,result['data'],1)
             b.frame.after(1,unloading)
             b.frame3.destroy()
-            
+
+frameCnt = 29
+frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
+def update(ind):
+
+    frame = frames[ind]
+    ind += 1
+    if ind == frameCnt:
+        ind = 0
+    b.Giflabel.configure(image=frame,bg="WHITE")
+    b.frame.after(20, update, ind)
+
+def loadGif():    
+    b.Giflabel.place(x=b.sW*0.5,y=b.sH*0.5,width = 150,height=150,anchor=CENTER)
+    b.frame.after(0, update, 0)
 
 
 t1= threading.Thread(target=timer)
