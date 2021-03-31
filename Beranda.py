@@ -384,6 +384,12 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
                 #print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
             except:
                 b.fullImage[bariskaryawan][o]=b.noImageLabel
+            if bariskaryawan>=(len(arrayKaryawan))-1 and o>=jumlahJob-1:
+                b.frame.after(10,unloading)
+                print("clear")
+            print(str(o)+":"+str(jumlahJob))
+
+            
         
 
 
@@ -470,6 +476,20 @@ def listKaryawan():
         labelUser[j]= Label(b.frame,text="Lontong",image = b.userGambar,bg="WHITE")
         labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
     
+frameCnt = 29
+frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
+def update(ind):
+
+    frame = frames[ind]
+    ind += 1
+    if ind == frameCnt:
+        ind = 0
+    b.Giflabel.configure(image=frame,bg="WHITE")
+    b.frame.after(20, update, ind)
+
+def loadGif():    
+    b.Giflabel.place(x=b.sW*0.5,y=b.sH*0.5,width = 150,height=150,anchor=CENTER)
+    b.frame.after(0, update, 0)
 
 def karyawanReq(karyawan):
     # print(karyawan)
@@ -480,14 +500,20 @@ def karyawanReq(karyawan):
     # print(result)
     karyawan_id = arrayKaryawan[karyawan]['id']
     appendCad(karyawan,result['data'],karyawan_id)
+    b.frame.after(0,loadGif)
 
 def refresh():
+    threadRefresh.set()
     
-    for i in range(len(arrayKaryawan)):
-        karyawanReq(i)
  
 # tryButton = Button(b.frame,text= "mbak bi",command = refresh)
 # tryButton.place(x=200,y=50,width=50,height=50)
+
+ngecloud=threading.Event()
+threadClosePressed=threading.Event()
+threadStartPressed=threading.Event()
+threadFinsihPressed=threading.Event()
+threadRefresh=threading.Event()
 
 def rutinCekFlag():
     global lastUpdate
@@ -499,7 +525,9 @@ def rutinCekFlag():
     # print(result)
     if result['flag'] == 1:
         print("ada yang baru nih")
-        refresh()
+        b.frame.after(0,loadGif)
+        threadRefresh.set()
+        
         
     b.frame.after(3000,rutinCekFlag)
     
@@ -534,17 +562,20 @@ def timer():
                     result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[b.nomor]['id']))
                     httpPost(url,query)
                     result=result.json()
-                    b.frame.after(1000,appendCad(b.nomor,result['data'],b.id_karyawan))
-                    b.frame.after(10,unloading)
-                    print("terpost")
-                    print("haruse baru ilang")
+                    #b.frame.after(1000,appendCad(b.nomor,result['data'],b.id_karyawan))
+
                     
                     
                 else :
                     b.frame.after(10,unloading)
                     
 
-
+        if threadRefresh.is_set():
+            
+            for i in range(len(arrayKaryawan)):
+                karyawanReq(i)
+            threadRefresh.clear()
+            b.frame.after(10,unloading)
         if ngecloud.is_set():
             print("clicked")
 
@@ -590,28 +621,11 @@ def timer():
             b.frame.after(1,unloading)
             b.frame3.destroy()
 
-frameCnt = 29
-frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
-def update(ind):
-
-    frame = frames[ind]
-    ind += 1
-    if ind == frameCnt:
-        ind = 0
-    b.Giflabel.configure(image=frame,bg="WHITE")
-    b.frame.after(20, update, ind)
-
-def loadGif():    
-    b.Giflabel.place(x=b.sW*0.5,y=b.sH*0.5,width = 150,height=150,anchor=CENTER)
-    b.frame.after(0, update, 0)
-
-
 t1= threading.Thread(target=timer)
-ngecloud=threading.Event()
-threadClosePressed=threading.Event()
-threadStartPressed=threading.Event()
-threadFinsihPressed=threading.Event()
 t1.start()
+
+
+
             
 
 lontong.mainloop()
