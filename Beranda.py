@@ -492,7 +492,7 @@ def update(ind):
     if ind == frameCnt:
         ind = 0
     b.Giflabel.configure(image=frame,bg="WHITE")
-    b.frame.after(20, update, ind)
+    b.frame.after(100, update, ind)
 
 def loadGif():    
     b.Giflabel.place(x=b.sW*0.5,y=b.sH*0.5,width = 150,height=150,anchor=CENTER)
