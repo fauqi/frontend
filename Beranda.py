@@ -22,7 +22,7 @@ query=""
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 lontong.iconbitmap('logo.ico')
-lontong.overrideredirect(True)
+#lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
 geturl=""
@@ -360,6 +360,7 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
 
     for i in range(60):
         b.btnTask[bariskaryawan][i].place_forget()
+        print(str(bariskaryawan)+":"+str(i))
     
 
     if flagInit==0:
@@ -438,7 +439,7 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         # print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
         # print(b.btnTask[bariskaryawan][i])
         b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id,x),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
-    b.frame.after(1000,unloading)
+    b.frame.after(100,unloading)
             
 
 def listKaryawan():
@@ -518,6 +519,7 @@ def timer():
                     result=result.json()
             
                     appendCad(b.nomor,result['data'],1)
+                    print("terpost")
                     
                 else :
                     b.frame.after(10,unloading)
