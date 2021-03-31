@@ -373,18 +373,20 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
 
     for i in range(60):
         b.btnTask[bariskaryawan][i].place_forget()
-        print(str(bariskaryawan)+":"+str(i))
+        #print(str(bariskaryawan)+":"+str(i))
     
 
     if flagInit==0:
         for o in range(jumlahJob):
             try:
-                
                 image=loadImageWebPublic(result[o]['image'],0,0.21*b.sH)
                 b.fullImage[bariskaryawan][o] =image
                 #print(str(bariskaryawan)+":"+str(o)+":"+str(result[o]['image']))
             except:
                 b.fullImage[bariskaryawan][o]=b.noImageLabel
+        
+
+
     flagInit=0
         
                 
@@ -452,7 +454,8 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         # print("buat button lo ini cuy "+str(bariskaryawan)+"-"+str(i))
         # print(b.btnTask[bariskaryawan][i])
         b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id,x),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
-    b.frame.after(100,unloading)
+
+    
             
 
 def listKaryawan():
@@ -497,6 +500,7 @@ def rutinCekFlag():
     if result['flag'] == 1:
         print("ada yang baru nih")
         refresh()
+        
     b.frame.after(3000,rutinCekFlag)
     
 #refresh()
@@ -530,9 +534,11 @@ def timer():
                     result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[b.nomor]['id']))
                     httpPost(url,query)
                     result=result.json()
-            
-                    appendCad(b.nomor,result['data'],1)
+                    b.frame.after(1000,appendCad(b.nomor,result['data'],b.id_karyawan))
+                    b.frame.after(10,unloading)
                     print("terpost")
+                    print("haruse baru ilang")
+                    
                     
                 else :
                     b.frame.after(10,unloading)
@@ -579,6 +585,7 @@ def timer():
             #print (arrayKaryawan[nomor]['id'])
             flagInit=1
             threadStartPressed.clear()
+            
             appendCad(b.nomor,result['data'],1)
             b.frame.after(1,unloading)
             b.frame3.destroy()
