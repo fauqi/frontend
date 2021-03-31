@@ -392,10 +392,10 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
             if bariskaryawan>=(len(arrayKaryawan))-1 and o>=jumlahJob-1:
                 b.frame.after(10,unloading)
                 print("clear")
-            print(str(o)+":"+str(jumlahJob))
+            #print(str(o)+":"+str(jumlahJob))
     for p in range(jumlahJob):
         b.strImage[bariskaryawan][p]=result[p]['image']
-        print(str(p)+":"+str(b.strImage[bariskaryawan][p]))
+        #print(str(p)+":"+str(b.strImage[bariskaryawan][p]))
             
         
 
