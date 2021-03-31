@@ -7,6 +7,7 @@ import queue
 import os
 
 refreshFlag=0
+fullRefresh=1
 flagInit=0
 tertekanFlag=0
 k=0
@@ -275,6 +276,7 @@ class Beranda:
             #print("no image bro")
             self.photoLabel.config(image=self.noImageLabel,bg="WHITE")
             self.fullImage[self.nomor][self.kolom]=self.noImageLabel
+            self.strImage[self.nomor][self.kolom] = self.dataReady['image']
         
             
         
@@ -525,7 +527,7 @@ threadFinsihPressed=threading.Event()
 threadRefresh=threading.Event()
 
 def rutinCekFlag():
-    global lastUpdate
+    global lastUpdate,refreshFlag,fullRefresh
     result=requests.get(server+"/api/v1/get-update-flag?date="+str(lastUpdate))
     result=result.json()
     lastUpdate=result['last_updated']
@@ -533,10 +535,18 @@ def rutinCekFlag():
     LastUpdateLabel.place(x=0.85*b.sW,y=0.024*b.sH) 
     # print(result)
     if result['flag'] == 1:
+        if fullRefresh ==0:
+            refreshFlag=1
+            fullRefresh=1
+
+        else:
+            refreshFlag=0
         print("ada yang baru nih")
+
         b.frame.after(0,loadGif)
         threadRefresh.set()
-        
+
+            
         
     b.frame.after(3000,rutinCekFlag)
     
@@ -547,11 +557,12 @@ listKaryawan()
 
 
 def timer():
-    global url,starFlag,tertekanFlag,geturl,posturl,flagInit,jumlahJob,refreshFlag  
+    global url,starFlag,tertekanFlag,geturl,posturl,flagInit,jumlahJob,refreshFlag,fullRefresh
     
     while True:
         time.sleep(0.1)
         if threadFinsihPressed.is_set():
+            fullRefresh=0
             threadFinsihPressed.clear()
             if b.dataReady['is_stock']== False:
                 messagebox.showerror("warning","Silahkan mutasi dulu stocknya!!")
@@ -587,6 +598,7 @@ def timer():
             else:
                 #appendCad(b.nomor,result['data'],b.id_karyawan)
                 karyawanReq(b.nomor)
+            print(refreshFlag)
             threadRefresh.clear()
             b.frame.after(10,unloading)
         if ngecloud.is_set():
