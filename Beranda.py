@@ -18,21 +18,12 @@ lastUpdate=0
 url=""
 query=""
 
-
-
-
-
-
-
-
-
-
 #nyoba commit
 #nyoba commit 2
 SCREENWIDTH = int(lontong.winfo_screenwidth())
 SCREENHEIGHT = int(lontong.winfo_screenheight())
 lontong.iconbitmap('logo.ico')
-#lontong.overrideredirect(True)
+lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
 geturl=""
@@ -89,6 +80,7 @@ class Beranda:
         self.showLayar()
         self.btnTask =[[0 for x in range(88)]  for x in range(5)]
         self.fullImage =[[0 for x in range(88)]  for x in range(5)]
+        self.strImage=[[0 for x in range(88)]  for x in range(5)]
         self.noImageLabel=Image.open("no image.png")
         self.noImageLabel=self.noImageLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
         self.noImageLabel= ImageTk.PhotoImage(self.noImageLabel)
@@ -235,7 +227,7 @@ class Beranda:
         self.labelWarna.place(x=0.28*self.sW,y=2*(0.04*self.sH+(0.02*self.sW))+(0.16*self.sH),width=0.07*self.sW,height=0.05*self.sH)
         self.loadingLabel=Image.open("loading.png")
         self.loadingLabel=self.loadingLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
-        self.loadingImagee= ImageTk.PhotoImage(self.loadingLabel)
+        self.loadingImage= ImageTk.PhotoImage(self.loadingLabel)
     def showPopup(self):
         self.frame2.place(x=(self.sW*0.5),y=(self.sH*0.5),height=self.sH*0.79,width=self.sW*0.41,anchor=CENTER)
         self.frame3=Frame(self.frame2,bg='#1687A7')
@@ -255,20 +247,33 @@ class Beranda:
         self.labelBrand.config(text=splitter(self.dataReady['brand'],15))
         self.labelStock.config(text=splitter(self.dataReady['stock'],15))
         self.labelWarna.config(text=splitter(self.dataReady['warna'],15))
-        self.photoLabel.config(image=self.fullImage[self.nomor][self.kolom],bg="WHITE")
+        self.photoLabel.config(image=self.loadingImage,bg="WHITE")
+        #print(str(self.strImage[self.nomor][self.kolom])+":"+str(self.dataReady['image']))
+        if self.strImage[self.nomor][self.kolom] == self.dataReady['image']:
+            self.photoLabel.config(image=self.fullImage[self.nomor][self.kolom],bg="WHITE")
+            print("sama kok")
+        else:
+            self.frame.after(100,self.loadPicture)
+            print("Beda ceunah")
+
         #print(str(self.nomor)+":"+str(self.kolom))
-        # self.frame.after(100,self.loadPicture)
+        # 
         # 
     def loadPicture(self):
         try:
             self.picturePopup=loadImageWebPublic(self.dataReady['image'],0,0.21*self.sH)
             self.photoLabel.config(image=self.picturePopup,bg="WHITE")
+            self.fullImage[self.nomor][self.kolom]=self.picturePopup
+            self.strImage[self.nomor][self.kolom] = self.dataReady['image']
+            
         except:
             # self.fotoLabel=Image.open("no image.png")
             # self.fotoLabel=self.fotoLabel.resize((int(0.13*self.sW), int(0.21*self.sH)), Image.ANTIALIAS)
             # self.gambarLabel= ImageTk.PhotoImage(self.fotoLabel)
             #print("no image bro")
-            self.photoLabel.config(image=self.noimage,bg="WHITE")
+            self.photoLabel.config(image=self.noImageLabel,bg="WHITE")
+            self.fullImage[self.nomor][self.kolom]=self.noImageLabel
+        
             
         
 
@@ -388,7 +393,9 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
                 b.frame.after(10,unloading)
                 print("clear")
             print(str(o)+":"+str(jumlahJob))
-
+    for p in range(jumlahJob):
+        b.strImage[bariskaryawan][p]=result[p]['image']
+        print(str(p)+":"+str(b.strImage[bariskaryawan][p]))
             
         
 
@@ -625,8 +632,6 @@ t1= threading.Thread(target=timer)
 t1.start()
 
 
-
-            
 
 lontong.mainloop()
       
