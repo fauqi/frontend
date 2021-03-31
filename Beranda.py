@@ -5,6 +5,8 @@ import threading
 import time
 import queue
 import os
+
+refreshFlag=0
 flagInit=0
 tertekanFlag=0
 k=0
@@ -545,7 +547,7 @@ listKaryawan()
 
 
 def timer():
-    global url,starFlag,tertekanFlag,geturl,posturl,flagInit,jumlahJob  
+    global url,starFlag,tertekanFlag,geturl,posturl,flagInit,jumlahJob,refreshFlag  
     
     while True:
         time.sleep(0.1)
@@ -578,9 +580,13 @@ def timer():
                     
 
         if threadRefresh.is_set():
-            
-            for i in range(len(arrayKaryawan)):
-                karyawanReq(i)
+            if refreshFlag==0:
+                for i in range(len(arrayKaryawan)):
+                    karyawanReq(i)
+                    refreshFlag=1
+            else:
+                #appendCad(b.nomor,result['data'],b.id_karyawan)
+                karyawanReq(b.nomor)
             threadRefresh.clear()
             b.frame.after(10,unloading)
         if ngecloud.is_set():
