@@ -597,10 +597,11 @@ def timer():
                     refreshFlag=1
             else:
                 #appendCad(b.nomor,result['data'],b.id_karyawan)
-                karyawanReq(b.nomor)
+                b.frame.after(1000,karyawanReq(b.nomor))
+                print(b.nomor)
             print(refreshFlag)
             threadRefresh.clear()
-            b.frame.after(10,unloading)
+            b.frame.after(100,unloading)
         if ngecloud.is_set():
             print("clicked")
 
