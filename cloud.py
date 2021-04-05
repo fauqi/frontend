@@ -36,7 +36,8 @@ def httpGet(url, data1):
 
 dataku1=requests.get(server+"/api/v1/get-karyawan?bidang=sablon")
 hasil1=dataku1.json()
-arrayKaryawan = [0 for x in range(len(hasil1['msg']))]
+
+arrayKaryawan = [0 for x in range(len(hasil1['msg'])+1)]
 # url = "/api/v1/get-karyawan?bidang=sablon"
 # query = dict(zip(( 'id','name'), ("1","Aji")))
 def getKaryawan():

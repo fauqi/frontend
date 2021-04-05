@@ -29,9 +29,10 @@ lontong.iconbitmap('logo.ico')
 lontong.overrideredirect(True)
 lontong.geometry("{0}x{1}+0+0".format(SCREENWIDTH, SCREENHEIGHT))
 getKaryawan()
+arrayKaryawan[4]={"nama":"coba","id":"5"}
 geturl=""
 posturl=""
-
+print(len(arrayKaryawan))
 
 #print(arrayKaryawan[2]['nama'])
 
@@ -445,11 +446,10 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         
         panjangButton=(wContainer-((0.01*b.sW)+((jumlahItem+1)*0.01*b.sW)))/containerJob[icontainer]
     
-        offsetH=0.164*b.sH + (bariskaryawan*0.180*b.sH)
+        offsetH=0.135*b.sH 
         offsetW=0.163*b.sW
   
-        b.btnTask[bariskaryawan][i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=((int(icontainer)*0.180*b.sH)+offsetH),width=panjangButton,height=0.158*b.sH) 
-
+        b.btnTask[bariskaryawan][i].place(x=(x)*(panjangButton+(0.01*b.sW))+offsetW,y=(bariskaryawan*0.17*b.sH)+offsetH,width=panjangButton,height=0.15*b.sH) 
         #print("i="+str(i) +",x="+str(x)+",sigma="+str(sigmaContainerTerlewat) +",icontainer= " + str(icontainer))
         x=i
         # try:
@@ -473,8 +473,6 @@ def appendCad(bariskaryawan,result,karyawan_id,kontainer=1,delete=0):
         b.btnTask[bariskaryawan][i].config(command=lambda x=i,id=result[x]['id'],nomor=bariskaryawan,karyawan_id=karyawan_id:b.tertekan(result[x],id,nomor,karyawan_id,x),text =text,bg =background,fg="WHITE",font='Roboto 12 bold')
 
     
-            
-
 def listKaryawan():
     global arrayKaryawan
     labelPegawai=[0 for z in range(len(arrayKaryawan))]
@@ -483,9 +481,9 @@ def listKaryawan():
     for j in range(len(arrayKaryawan)):
         #print(j)
         labelPegawai[j]= Label(b.frame,text = arrayKaryawan[j]['nama'],bg="WHITE",fg='#1687A7',font=10)
-        labelPegawai[j].place(x=0.085*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
+        labelPegawai[j].place(x=0.085*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.2*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
         labelUser[j]= Label(b.frame,text="Lontong",image = b.userGambar,bg="WHITE")
-        labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.243*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
+        labelUser[j].place(x=0.0285*b.sW,y=j*((0.078*b.sH)+0.09*b.sH)+(0.2*b.sH),width=0.056*b.sW,height=0.078*b.sH,anchor=W)
     
 frameCnt = 29
 frames = [PhotoImage(file='loading gif.gif',format = 'gif -index %i' %(i)) for i in range(frameCnt)]       
@@ -508,7 +506,10 @@ def karyawanReq(karyawan):
     url = server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id'])
     result=requests.get(server+"/api/v1/get-project?karyawan_id="+str(arrayKaryawan[karyawan]['id']))
     result=result.json()
-    # print(result)
+
+    # if karyawan==4:
+    #     result={'data': [{'id': 6037, 'customer': 'Ario', 'deadline': 'Kamis, 11 maret  2021', 'qty': '5000 lbr', 'info': '1 sisi screen :', 'brand': 'Ayam Geprek The master', 'stock': '[Ayam Geprek The master] printing kertas 22*27', 'warna': '- -', 'is_stock': False, 'is_start': True, 'image': 'http://127.0.0.1:8000/desain/20210331220345-Screenshot (45).png', 'date_start': '2021-03-17 15:32:44'}, {'id': 6076, 'customer': 'Very(Damar galih) tokopedia', 'deadline': 'Senin, 08 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'Otsu coffee', 'stock': '[Otsu coffee] sablon 12 Wita OV', 'warna': 'merah -', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220314-Screenshot (28).png', 'date_start': None}, {'id': 6079, 'customer': 'johanes', 'deadline': "Jum'at, 05 maret  2021", 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :B4', 'brand': 'joja house', 'stock': '[joja house] sablon 14 HOKKAKU OV', 'warna': 'hitam kuning', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220055-Screenshot (2).png', 'date_start': None}, {'id': 6081, 'customer': 'ahmad kriwul lamongan', 'deadline': 'Kamis, 04 maret  2021', 'qty': '1000 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'ayam kriwul', 'stock': '[ayam kriwul] sablon Paper Bowl 500', 'warna': 'merah -', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220323-Screenshot (40).png', 'date_start': None}, {'id': 6083, 'customer': 'ahmad kriwul lamongan', 'deadline': 'Kamis, 04 maret  2021', 'qty': '3500 lbr', 'info': '1 sisi screen :', 'brand': 'ayam kriwul', 'stock': '[ayam kriwul] printing kertas 22*27', 'warna': '- -', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220335-Screenshot (55).png', 'date_start': None}, {'id': 6116, 'customer': 'herren', 'deadline': 'Senin, 08 maret  2021', 'qty': '500 pcs', 'info': '2 sisi atau lebih screen :', 'brand': 'locale', 'stock': '[locale] sablon box toast sleeve', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220209-13 sept.png', 'date_start': None}, {'id': 6119, 'customer': 'mas rigel', 'deadline': 'Kamis, 11 maret  2021', 'qty': '1000 pcs', 'info': '1 sisi screen :', 'brand': 'warkop brewok', 'stock': '[warkop brewok] sablon Paper Bag Coklat Besar', 'warna': 'cokelat -', 'is_stock': False, 'is_start': False, 'image': 'http://127.0.0.1:8000/desain/20210331220048-Screenshot (1).png', 'date_start': None}, {'id': 6120, 'customer': 'hadi', 'deadline': 'Senin, 15 maret  2021', 'qty': '5000 lbr', 'info': '1 sisi screen :', 'brand': 'GM burger', 'stock': '[GM burger] printing kertas 25*27', 'warna': 'hitam -', 'is_stock': False, 'is_start': False, 'image': None, 'date_start': None}], 'last_updated': '2021-04-05 10:02:42'}
+
     karyawan_id = arrayKaryawan[karyawan]['id']
     appendCad(karyawan,result['data'],karyawan_id)
     b.frame.after(0,loadGif)
@@ -649,7 +650,6 @@ def timer():
 
 t1= threading.Thread(target=timer)
 t1.start()
-
 
 
 lontong.mainloop()
